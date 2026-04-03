@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sydney — Embedded Systems Engineer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+
+  :root {
+    --o-mid:    #e85c00;
+    --o-bright: #ff8c28;
+    --o-pale:   #ffd090;
+    --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font); min-height: 100vh; overflow-x: hidden; }
+
+  /* ── PAGE SYSTEM ── */
+  .page { display: none; min-height: 100vh; flex-direction: column; }
+  .page.active { display: flex; }
+
+  /* ════════════════════════════════════════════
+     BACKGROUND SYSTEM
+     • Login: CSS nature gradient + leaf/orb motifs
+     • Main pages: image behind everything, or CSS fallback
+  ════════════════════════════════════════════ */
+
+  /* LOGIN – soft lime-glass sunlight feel */
+  #page-login {
+    align-items: center; justify-content: center;
+    background: url('frutigeraeroclover.jpg') center/cover no-repeat;
+  }
+
+  /* Main pages — set --bg-image via JS or leave as CSS fallback */
+  #page-main {
+    background:
+      radial-gradient(ellipse 70% 50% at 50% -8%,  rgba(230,255,160,0.55) 0%, transparent 52%),
+      radial-gradient(ellipse 50% 60% at 0%   70%,  rgba(140,210,40,0.30) 0%, transparent 50%),
+      radial-gradient(ellipse 40% 55% at 100% 30%,  rgba(160,230,50,0.25) 0%, transparent 50%),
+      linear-gradient(165deg,
+        #d4f070 0%,
+        #aad820 18%,
+        #80b800 38%,
+        #559000 58%,
+        #306800 78%,
+        #184000 100%);
+    background-attachment: fixed;
+  }
+  /* When a real photo is set */
+  #page-main.has-bg-image {
+    background-image: var(--bg-image);
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+  }
+
+  /* ════════════════════════════════════════════
+     GLASS PANEL — warm dark tint, readable white
+     text, glassy shine, fully see-through via blur
+  ════════════════════════════════════════════ */
+  .glass-panel {
+    /* warmer: a touch of amber/olive mixed into the green */
+    background: linear-gradient(158deg,
+      rgba(20, 45, 5,  0.56) 0%,
+      rgba(35, 55, 8,  0.50) 35%,
+      rgba(25, 48, 5,  0.54) 70%,
+      rgba(10, 35, 2,  0.60) 100%);
+    border: 1.5px solid rgba(255,255,255,0.32);
+    border-radius: 16px;
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.60),
+      inset 0 -1px  0 rgba(0,0,0,0.22),
+      inset 1px 0   0 rgba(255,255,255,0.20),
+      0 8px 36px rgba(0,0,0,0.42),
+      0 2px 10px rgba(0,0,0,0.26);
+    backdrop-filter: blur(18px) saturate(1.5);
+    position: relative; overflow: hidden;
+  }
+  /*
+   * GLOSSY TOP-SHINE — more dramatic than last iteration.
+   * The two-stop design gives a bright crisp band at top
+   * that dissolves to nothing at ~58%, like liquid glass.
+   */
+  .glass-panel::before {
+    content: '';
+    position: absolute; top: 0; left: 0; right: 0; height: 52%;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.52) 0%,
+      rgba(255,255,255,0.20) 32%,
+      rgba(255,255,255,0.04) 58%,
+      transparent 100%);
+    border-radius: 16px 16px 75% 75% / 16px 16px 52px 52px;
+    pointer-events: none; z-index: 1;
+  }
+  .glass-panel > * { position: relative; z-index: 2; }
+
+  /* ════════════════════════════════════════════
+     ORB — glassy water-bubble style, clear not plastic
+  ════════════════════════════════════════════ */
+  .orb {
+    border-radius: 50%; flex-shrink: 0; position: relative;
+    /* clear glass: very light fill, strong rim darkening */
+    background: radial-gradient(circle at 36% 30%,
+      rgba(255,255,255,0.92) 0%,
+      rgba(210,255,180,0.50) 18%,
+      rgba(140,220,80,0.20)  42%,
+      rgba(60,150,20,0.14)   66%,
+      rgba(10,60,0,0.22)     88%,
+      rgba(0,30,0,0.38)      100%);
+    box-shadow:
+      /* inner rim shadow — gives glass depth */
+      inset 0 0 0 1.5px rgba(255,255,255,0.18),
+      inset -6px -8px 20px rgba(0,60,0,0.28),
+      inset 4px  5px  14px rgba(255,255,255,0.22),
+      /* outer glow */
+      0 4px 18px rgba(80,160,0,0.22),
+      0 1px  4px rgba(0,0,0,0.15);
+  }
+  /* primary highlight — large crescent top-left */
+  .orb::before {
+    content: ''; position: absolute;
+    top: 7%; left: 12%; width: 44%; height: 28%;
+    background: radial-gradient(ellipse,
+      rgba(255,255,255,0.90) 0%,
+      rgba(255,255,255,0.40) 50%,
+      transparent 100%);
+    border-radius: 50%; transform: rotate(-30deg);
+    z-index: 2;
+  }
+  /* secondary small highlight — bottom-right rim catch */
+  .orb::after {
+    content: ''; position: absolute;
+    bottom: 14%; right: 12%; width: 22%; height: 14%;
+    background: radial-gradient(ellipse,
+      rgba(255,255,255,0.55) 0%, transparent 100%);
+    border-radius: 50%; transform: rotate(20deg);
+    z-index: 2;
+  }
+
+  /* ════════════════════════════════════════════
+     BUTTONS
+  ════════════════════════════════════════════ */
+  .btn-gloss {
+    display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+    padding: 11px 28px; border-radius: 999px;
+    border: 1.5px solid rgba(255,255,255,0.65);
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.90) 0%,
+      rgba(215,255,80,0.88)  44%,
+      rgba(145,210,0,0.96)   50%,
+      rgba(72,140,0,0.99)    100%);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.99),
+      inset 0 -1px  0 rgba(0,50,0,0.30),
+      0 5px 14px rgba(40,90,0,0.40),
+      0 0   0 1px rgba(0,70,0,0.18);
+    color: #142200; font-family: var(--font);
+    font-size: 13px; font-weight: 700;
+    cursor: pointer; text-decoration: none;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.55);
+    transition: filter .12s, transform .08s;
+  }
+  .btn-gloss:hover  { filter: brightness(1.09); transform: translateY(-1px); }
+  .btn-gloss:active { filter: brightness(0.95); transform: translateY(1px); }
+
+  .btn-orange {
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.90) 0%,
+      rgba(255,210,110,0.88) 44%,
+      rgba(255,122,20,0.96)  50%,
+      rgba(192,62,0,0.99)    100%);
+    border-color: rgba(255,195,90,0.72);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255,255,255,0.99),
+      inset 0 -1px  0 rgba(95,25,0,0.30),
+      0 5px 14px rgba(170,60,0,0.40);
+    color: #240600;
+  }
+
+  .btn-chrome {
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.95) 0%,
+      rgba(224,242,185,0.90) 44%,
+      rgba(162,196,90,0.96)  50%,
+      rgba(100,152,42,0.99)  100%);
+    border-color: rgba(255,255,255,0.85);
+    color: #142200;
+  }
+
+  /* ════════════════════════════════════════════
+     SCROLLBAR
+  ════════════════════════════════════════════ */
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: rgba(0,30,0,0.25); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, rgba(200,240,60,0.7), rgba(60,130,0,0.8));
+    border-radius: 4px; border: 1px solid rgba(255,255,255,0.25);
+  }
+
+  /* ════════════════════════════════════════════
+     BACKGROUND BOKEH — spawned by JS post-login
+  ════════════════════════════════════════════ */
+  .bg-orbs-layer {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
+  }
+  .bg-orb-bubble {
+    position: absolute; border-radius: 50%;
+    background: radial-gradient(circle at 36% 30%,
+      rgba(255,255,255,0.88) 0%,
+      rgba(220,255,170,0.42) 20%,
+      rgba(130,210,40,0.16)  50%,
+      rgba(40,110,0,0.10)    80%,
+      rgba(0,30,0,0.16)      100%);
+    box-shadow:
+      inset 0 0 0 1px rgba(255,255,255,0.14),
+      inset -3px -4px 12px rgba(0,50,0,0.20),
+      inset  2px  3px  8px rgba(255,255,255,0.18);
+  }
+  .bg-orb-bubble::before {
+    content: ''; position: absolute;
+    top: 8%; left: 13%; width: 42%; height: 26%;
+    background: radial-gradient(ellipse, rgba(255,255,255,0.82) 0%, transparent 100%);
+    border-radius: 50%; transform: rotate(-28deg);
+  }
+
+  /* ════════════════════════════════════════════
+     LOGIN DECORATIVE MOTIFS
+  ════════════════════════════════════════════ */
+
+  /* Clover */
+  .clover-wrap {
+    position: fixed; bottom: -30px; left: -40px;
+    width: 280px; height: 280px; pointer-events: none; opacity: 0.60;
+  }
+  .clover-leaf {
+    position: absolute; width: 95px; height: 125px;
+    background: radial-gradient(ellipse at 38% 38%,
+      rgba(255,255,255,0.55) 0%,
+      #b8e030 20%, #72a810 55%, #1c5800 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    box-shadow: inset 0 0 20px rgba(255,255,255,0.30), 0 4px 12px rgba(0,40,0,0.30);
+  }
+  .clover-leaf:nth-child(1) { transform: rotate(0deg)   translateY(-38px); transform-origin: 50% 100%; }
+  .clover-leaf:nth-child(2) { transform: rotate(120deg) translateY(-38px); transform-origin: 50% 100%; }
+  .clover-leaf:nth-child(3) { transform: rotate(240deg) translateY(-38px); transform-origin: 50% 100%; }
+  .clover-stem {
+    position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+    width: 8px; height: 58px;
+    background: linear-gradient(180deg, #90cc10, #1c5800); border-radius: 4px;
+  }
+
+  /* CSS leaf silhouette top-right */
+  .login-leaf-tr {
+    position: fixed; top: -20px; right: -20px; pointer-events: none;
+    width: 200px; height: 260px; opacity: 0.35;
+    background: radial-gradient(ellipse at 40% 40%,
+      rgba(255,255,255,0.50) 0%, #c0e020 20%, #68a000 55%, #1a4800 100%);
+    border-radius: 0% 0% 100% 100% / 0% 0% 70% 70%;
+    transform: rotate(35deg) translate(30px, -30px);
+  }
+  .login-leaf-bl {
+    position: fixed; bottom: 40px; right: 80px; pointer-events: none;
+    width: 130px; height: 180px; opacity: 0.25;
+    background: radial-gradient(ellipse at 40% 40%,
+      rgba(255,255,255,0.40) 0%, #a8d010 25%, #50880a 60%, #183800 100%);
+    border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+    transform: rotate(-20deg);
+  }
+
+  /* ════════════════════════════════════════════
+     LOGIN FORM
+  ════════════════════════════════════════════ */
+  .login-wrap {
+    position: relative; z-index: 10;
+    display: flex; flex-direction: column; align-items: center; gap: 18px;
+    width: 310px;
+  }
+  .login-avatar {
+    width: 108px; height: 108px; border-radius: 10px;
+    border: 3px solid rgba(255,255,255,0.95);
+    box-shadow:
+      0 0 0 1px rgba(140,180,60,0.50),
+      0 0 0 3px rgba(200,220,160,0.60),
+      0 8px 24px rgba(0,30,0,0.30),
+      inset 0 1px 0 rgba(255,255,255,0.80);
+    background: linear-gradient(145deg,
+      rgba(255,255,255,0.70) 0%,
+      rgba(210,250,100,0.50) 100%);
+    overflow: hidden; position: relative;
+    display: flex; align-items: center; justify-content: center; font-size: 52px;
+  }
+  .login-avatar::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 50%;
+    background: linear-gradient(180deg, rgba(255,255,255,0.52) 0%, transparent 100%); z-index: 1;
+  }
+  .login-username {
+  font-size: 17px; font-weight: 300; color: #182800;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.40); letter-spacing: 0.4px;
+  }
+  .login-input-wrap {
+    width: 260px; display: flex; align-items: center;
+    background: rgba(255,255,255,0.96);
+    border: 1.5px solid rgba(180,210,80,0.70);
+    border-radius: 999px;
+    box-shadow:
+      inset 0 2px 6px rgba(0,60,0,0.10),
+      0 2px 8px rgba(0,0,0,0.18),
+      0 1px 0 rgba(255,255,255,0.90);
+    overflow: hidden;
+  }
+  .login-input-wrap input {
+    flex: 1; padding: 10px 16px;
+    background: transparent; border: none; outline: none;
+    font-family: var(--font); font-size: 13px;
+    color: #2a4400;
+  }
+  .login-input-wrap input::placeholder { color: #8ab840; }
+  .login-go {
+    width: 42px; height: 42px;
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.90) 0%,
+      rgba(255,215,118,0.88) 44%,
+      rgba(255,122,20,0.96)  50%,
+      rgba(192,62,0,0.99)    100%);
+    border: none;
+    border-left: 1px solid rgba(255,180,60,0.40);
+    border-radius: 0 999px 999px 0;
+    cursor: pointer; transition: filter .1s;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.80);
+  }
+  .login-go:hover { filter: brightness(1.12); }
+  .login-go svg { fill: white; width: 16px; height: 16px; }
+  .login-hint {
+    font-size: 12.5px; font-weight: 300;
+    font-family: var(--font);
+    color: rgba(30,60,0,0.90);
+    text-shadow: 0 1px 0 rgba(255,255,255,0.70);
+    text-align: center;
+  }
+  .login-hint strong {
+    font-weight: 600; color: #182800;
+  }
+
+  /* ════════════════════════════════════════════
+     NAV BAR
+  ════════════════════════════════════════════ */
+  .navbar {
+    position: sticky; top: 0; z-index: 100; flex-shrink: 0;
+    background: rgba(0, 28, 0, 0.78);
+    border-bottom: 1px solid rgba(160,220,0,0.28);
+    box-shadow: 0 2px 18px rgba(0,0,0,0.50), inset 0 1px 0 rgba(160,220,0,0.15);
+    backdrop-filter: blur(20px);
+    padding: 0 28px;
+    display: flex; align-items: center; gap: 4px; height: 52px;
+  }
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    margin-right: 18px; cursor: pointer;
+  }
+  .nav-brand-orb { width: 28px; height: 28px; }
+  .nav-brand-text {
+    font-size: 15px; font-weight: 700; color: #c8f040;
+    text-shadow: 0 0 10px rgba(180,230,0,0.40);
+  }
+  .nav-sep { width: 1px; height: 24px; background: rgba(160,220,0,0.22); margin: 0 6px; }
+  .nav-item {
+    padding: 7px 16px; border-radius: 18px;
+    font-size: 13px; font-weight: 600; color: #a0c040;
+    cursor: pointer; text-decoration: none;
+    border: 1.5px solid transparent; transition: all .12s;
+  }
+  .nav-item:hover {
+    background: rgba(140,200,0,0.18); border-color: rgba(160,220,0,0.36); color: #d0f060;
+  }
+  .nav-item.active {
+    background: linear-gradient(180deg, rgba(160,220,0,0.28) 0%, rgba(100,170,0,0.20) 100%);
+    border-color: rgba(160,220,0,0.52); color: #eeff7e;
+    box-shadow: 0 0 8px rgba(150,210,0,0.20), inset 0 1px 0 rgba(255,255,255,0.16);
+  }
+
+  /* ════════════════════════════════════════════
+     LAYOUT
+  ════════════════════════════════════════════ */
+  .main-shell { display: flex; flex: 1; }
+
+  .sidebar {
+    width: 196px; flex-shrink: 0;
+    background: rgba(0, 20, 0, 0.72);
+    border-right: 1px solid rgba(130,190,0,0.20);
+    padding: 18px 10px;
+    display: flex; flex-direction: column; gap: 5px;
+    backdrop-filter: blur(18px);
+  }
+  .sidebar-section {
+    font-size: 10px; font-weight: 700; color: rgba(160,210,60,0.55);
+    letter-spacing: 1.2px; text-transform: uppercase; padding: 10px 8px 4px;
+  }
+  .sidebar-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px; border-radius: 8px;
+    font-size: 12.5px; font-weight: 500; color: rgba(180,230,80,0.80);
+    cursor: pointer; transition: all .1s; border: 1px solid transparent;
+  }
+  .sidebar-item:hover {
+    background: rgba(140,200,0,0.18); border-color: rgba(160,220,0,0.28); color: #c8f060;
+  }
+  .sidebar-item.active {
+    background: linear-gradient(90deg, rgba(150,210,0,0.25) 0%, rgba(90,155,0,0.16) 100%);
+    border-color: rgba(160,220,0,0.42); color: #d8f060;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
+  }
+  .sidebar-icon { font-size: 15px; flex-shrink: 0; }
+
+  .content-area {
+    flex: 1; padding: 28px 32px; overflow-y: auto;
+    /* transparent so bg image shows through */
+    background: transparent;
+  }
+
+  /* ════════════════════════════════════════════
+     TYPOGRAPHY — consistent across all pages
+     (home style = h1/h2/body style used everywhere)
+  ════════════════════════════════════════════ */
+  .pg-title {       /* large heading like "welcome to..." */
+    font-size: 30px; font-weight: 300; color: #f0ffe8;
+    letter-spacing: -0.5px; margin-bottom: 8px;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.40);
+  }
+  .pg-subtitle {    /* one-liner descriptor */
+    font-size: 14px; color: rgba(220,255,160,0.80);
+    margin-bottom: 26px; line-height: 1.58;
+  }
+  .pg-section {     /* section heading like "about me" */
+    font-size: 22px; font-weight: 300; color: #f0ffe8;
+    margin-bottom: 8px;
+    text-shadow: 0 1px 8px rgba(0,0,0,0.30);
+  }
+  .pg-body {        /* body paragraphs */
+    font-size: 13.5px; color: rgba(215,255,155,0.90);
+    line-height: 1.70; margin-bottom: 20px;
+  }
+  .pg-meta {        /* dates, companies — orange accent */
+    font-size: 12px; color: rgba(255,200,100,0.90);
+    font-weight: 600; margin-bottom: 5px;
+  }
+
+  .page-header-rule {
+    font-size: 22px; font-weight: 300; color: #f0ffe8;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.40);
+    display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+  }
+  .page-header-rule::after {
+    content: ''; flex: 1; height: 1px;
+    background: linear-gradient(90deg, rgba(160,220,0,0.50), transparent);
+  }
+
+  /* ════════════════════════════════════════════
+     HOME PAGE
+  ════════════════════════════════════════════ */
+  .home-panel { max-width: 680px; margin: 0 auto; padding: 36px 42px; }
+  .home-btn-row { margin-top: 28px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  /* ════════════════════════════════════════════
+     PROJECTS PAGE — community-gallery layout
+     Big title panel + two-column card grid
+  ════════════════════════════════════════════ */
+  .projects-header-panel {
+    padding: 28px 32px; margin-bottom: 24px;
+  }
+
+  .projects-two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+
+  .proj-card {
+    display: flex; align-items: center; gap: 20px;
+    padding: 22px 24px;
+    cursor: pointer; transition: transform .14s;
+    min-height: 110px;
+  }
+  .proj-card:hover { transform: translateY(-2px); }
+
+  /* ── PROJECT CARD THUMBNAIL ──
+     Square image slot on the left of each card.
+     When p.preview is set it shows your photo;
+     when empty it shows a labelled placeholder.  */
+  .proj-card-thumb {
+    width: 88px; height: 88px; flex-shrink: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid rgba(255,255,255,0.28);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,0.45),
+      0 3px 12px rgba(0,0,0,0.35);
+    background: rgba(0,30,0,0.45);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: rgba(180,230,60,0.45);
+    font-style: italic; text-align: center;
+    position: relative;
+  }
+  .proj-card-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    display: block;
+  }
+  /* tiny gloss on the thumb */
+  .proj-card-thumb::after {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 45%;
+    background: linear-gradient(180deg,
+      rgba(255,255,255,0.22) 0%, transparent 100%);
+    pointer-events: none;
+  }
+
+  .proj-card-text { flex: 1; min-width: 0; }
+  .proj-card-name {
+    font-size: 22px; font-weight: 300; color: #f0ffe8;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  }
+  .proj-card-desc {
+    font-size: 13px; color: rgba(210,250,150,0.82); line-height: 1.55;
+  }
+  .proj-card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 9px; }
+  .proj-tag {
+    font-size: 10.5px; font-weight: 600; padding: 3px 9px; border-radius: 8px;
+    background: rgba(255,128,28,0.20); border: 1px solid rgba(255,140,38,0.38);
+    color: #ffd090;
+  }
+
+  /* ════════════════════════════════════════════
+     PROJECT DETAIL
+  ════════════════════════════════════════════ */
+  .project-detail-hero {
+    width: 100%; height: 170px;
+    border-radius: 16px; overflow: hidden; margin-bottom: 22px;
+    display: flex; align-items: center; justify-content: center; font-size: 68px;
+    position: relative;
+    border: 1.5px solid rgba(255,255,255,0.22);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.22);
+  }
+  .project-detail-hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 50%);
+  }
+  .detail-section { margin-bottom: 14px; }
+  .detail-section h3 {
+    font-size: 11px; font-weight: 700; color: rgba(200,240,80,0.80);
+    letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 8px;
+  }
+  .detail-images {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px;
+    margin-top: 10px;
+  }
+  .detail-img-slot {
+    height: 112px; border-radius: 10px;
+    background: rgba(255,255,255,0.06);
+    border: 1.5px dashed rgba(150,210,0,0.30);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; color: rgba(170,230,50,0.40); font-style: italic;
+  }
+  .back-btn { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px; }
+
+  /* ════════════════════════════════════════════
+     ABOUT PAGE
+  ════════════════════════════════════════════ */
+  .about-grid { display: flex; flex-direction: column; gap: 20px; }
+
+  .timeline-item {
+    display: flex; gap: 14px; padding: 16px 18px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(160,220,0,0.16);
+    transition: background .1s; margin-bottom: 4px;
+  }
+  .timeline-item:hover { background: rgba(140,200,0,0.10); }
+  .timeline-dot {
+    width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; margin-top: 4px;
+    background: radial-gradient(circle at 35% 35%, var(--o-pale), var(--o-mid));
+    box-shadow: 0 0 6px rgba(255,138,38,0.60);
+  }
+
+  .skills-pills { display: flex; flex-wrap: wrap; gap: 9px; padding: 4px 0; }
+  .skill-pill {
+    padding: 7px 15px; border-radius: 14px;
+    background: rgba(150,210,0,0.18);
+    border: 1px solid rgba(160,220,0,0.35);
+    font-size: 13px; font-weight: 400; color: rgba(220,255,150,0.92);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+  }
+
+  .edu-card { padding: 16px 18px; display: flex; gap: 16px; align-items: flex-start; }
+  .edu-icon {
+    width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+    background: linear-gradient(135deg, var(--o-pale), var(--o-mid));
+    box-shadow: 0 0 12px rgba(255,118,28,0.38), inset 0 1px 0 rgba(255,255,255,0.55);
+    display: flex; align-items: center; justify-content: center; font-size: 19px;
+  }
+
+  .hobbies-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px;
+  }
+  .hobby-card { padding: 18px 20px; text-align: center; }
+  .hobby-icon  { font-size: 34px; margin-bottom: 10px; }
+  .hobby-img-strip {
+    display: flex; gap: 9px; margin-top: 12px; overflow-x: auto; padding-bottom: 3px;
+  }
+  .hobby-img {
+    min-width: 108px; height: 70px; border-radius: 8px;
+    background: rgba(255,255,255,0.07);
+    border: 1.5px dashed rgba(150,210,0,0.28);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; color: rgba(170,230,50,0.40); font-style: italic; flex-shrink: 0;
+  }
+
+  @media(max-width:700px){
+    .sidebar { display: none; }
+    .home-panel { padding: 22px 18px; }
+    .projects-two-col { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!--
+╔══════════════════════════════════════════════════════════════════╗
+║              SYDNEY.DEV PORTFOLIO — CUSTOMISATION GUIDE         ║
+╠══════════════════════════════════════════════════════════════════╣
+║                                                                  ║
+║  1. BACKGROUND (main pages)                                      ║
+║     ─────────────────────────────────────────────────────────── ║
+║     a) Put your image file (e.g. bg.jpg) in the same folder      ║
+║        as this HTML file.                                        ║
+║     b) Find the <div id="page-main" …> tag below.               ║
+║     c) Add these two attributes to it:                           ║
+║          class="has-bg-image"                                    ║
+║          style="--bg-image:url('bg.jpg')"                        ║
+║     Result: <div id="page-main" class="page has-bg-image"        ║
+║               style="--bg-image:url('bg.jpg')">                  ║
+║     The glass panels blur whatever is behind them automatically.  ║
+║                                                                  ║
+║  2. LOGIN BACKGROUND                                             ║
+║     ─────────────────────────────────────────────────────────── ║
+║     Find #page-login in the <style> block and replace the        ║
+║     'background:' property with:                                 ║
+║       background: url('login-bg.jpg') center/cover no-repeat;   ║
+║                                                                  ║
+║  3. LOGIN PROFILE PICTURE                                        ║
+║     ─────────────────────────────────────────────────────────── ║
+║     Find the comment "CUSTOMISE: Login profile picture" below.   ║
+║     Replace the 🐱 emoji inside .login-avatar with:             ║
+║       <img src="your-photo.jpg"                                  ║
+║            style="width:100%;height:100%;                        ║
+║                   object-fit:cover;border-radius:12px;">         ║
+║                                                                  ║
+║  4. NAV BAR ICON (next to "sydney.dev")                          ║
+║     ─────────────────────────────────────────────────────────── ║
+║     Find the comment "CUSTOMISE: Nav icon" below.                ║
+║     Replace <div class="orb nav-brand-orb"> with:               ║
+║       <img src="icon.png"                                        ║
+║            style="width:28px;height:28px;                        ║
+║                   border-radius:50%;object-fit:cover;">          ║
+║     Recommended: square PNG ≥56 px, with or without transparency ║
+║                                                                  ║
+║  5. PROJECT PREVIEW IMAGES                                       ║
+║     ─────────────────────────────────────────────────────────── ║
+║     In the PROJECTS array in the <script> block, each project    ║
+║     has a line:  preview: '',                                    ║
+║     Fill in the path to your image, e.g.:                        ║
+║       preview: 'images/rtos-preview.jpg',                        ║
+║     The card will then show your image instead of the emoji.     ║
+║     Recommended size: 176×176 px or larger, any aspect ratio     ║
+║     (it crops to fit the 88×88 square automatically).            ║
+║                                                                  ║
+║  6. PROJECT DETAIL / INLINE IMAGES                               ║
+║     ─────────────────────────────────────────────────────────── ║
+║     Each project also has an 'images' array that shows           ║
+║     placeholder slots on the detail page.                        ║
+║     In renderProjectDetail(), replace:                           ║
+║       <div class="detail-img-slot">[ ${img} ]</div>              ║
+║     with:                                                        ║
+║       <img src="images/rtos-diagram.jpg"                         ║
+║            style="width:100%;height:112px;                       ║
+║                   object-fit:cover;border-radius:10px;">         ║
+║     Or just change the 'images' array entries to img tags.       ║
+║                                                                  ║
+╚══════════════════════════════════════════════════════════════════╝
+-->
+
+<div class="bg-orbs-layer" id="bg-orbs"></div>
+
+<!-- ══════════════════════════════════
+     LOGIN PAGE
+══════════════════════════════════ -->
+<div id="page-login" class="page active">
+
+  <!-- CSS nature motifs -->
+  <div class="login-leaf-tr"></div>
+  <div class="login-leaf-bl"></div>
+  <div class="clover-wrap">
+    <div class="clover-leaf"></div>
+    <div class="clover-leaf"></div>
+    <div class="clover-leaf"></div>
+    <div class="clover-stem"></div>
+  </div>
+
+  <!-- Glassy water-bubble orbs scattered around -->
+  <div style="position:fixed;top:8%;right:12%;pointer-events:none;"><div class="orb" style="width:80px;height:80px;"></div></div>
+  <div style="position:fixed;top:25%;right:5%;pointer-events:none;"><div class="orb" style="width:44px;height:44px;opacity:0.82;"></div></div>
+  <div style="position:fixed;top:60%;right:18%;pointer-events:none;"><div class="orb" style="width:28px;height:28px;opacity:0.70;"></div></div>
+  <div style="position:fixed;bottom:18%;left:7%;pointer-events:none;"><div class="orb" style="width:60px;height:60px;opacity:0.72;"></div></div>
+  <div style="position:fixed;top:16%;left:10%;pointer-events:none;"><div class="orb" style="width:30px;height:30px;opacity:0.60;"></div></div>
+  <div style="position:fixed;top:42%;left:18%;pointer-events:none;"><div class="orb" style="width:18px;height:18px;opacity:0.50;"></div></div>
+  <div style="position:fixed;bottom:35%;right:32%;pointer-events:none;"><div class="orb" style="width:14px;height:14px;opacity:0.42;"></div></div>
+  <div style="position:fixed;top:72%;left:38%;pointer-events:none;"><div class="orb" style="width:10px;height:10px;opacity:0.36;"></div></div>
+
+  <div class="login-wrap">
+    <!--
+      ═══ CUSTOMISE: Login profile picture ═══
+      Replace the emoji inside .login-avatar with:
+        <img src="images/your-photo.jpg"
+             style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
+      Recommended: a square photo, at least 216×216 px.
+      The ::before shine overlay stays on top automatically.
+    -->
+    <div class="login-avatar">🐱</div>
+    <div class="login-username">sydney</div>
+    <div class="login-input-wrap">
+      <input type="password" id="login-pw" placeholder="Password"
+             onkeydown="if(event.key==='Enter')doLogin()">
+      <button class="login-go" onclick="doLogin()">
+        <svg viewBox="0 0 16 16">
+          <path d="M3 8h9M8 4l4 4-4 4" stroke="white" stroke-width="2"
+                fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    <p class="login-hint">Hint: the password is <strong>helloworld</strong></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     MAIN SHELL
+══════════════════════════════════ -->
+<div id="page-main" class="has-bg-image"
+    style="--bg-image:url('frutigeraerobg_1.jpg')">
+  <nav class="navbar">
+    <div class="nav-brand" onclick="navigate('home')">
+      <!--
+        ═══ CUSTOMISE: Nav icon ═══
+        Replace the <div class="orb"> below with:
+          <img src="images/your-icon.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+        Recommended: a circular 56×56 px PNG with transparency.
+      -->
+      <div class="orb nav-brand-orb"></div>
+      <span class="nav-brand-text">sydney.dev</span>
+    </div>
+    <div class="nav-sep"></div>
+    <a class="nav-item active" id="nav-home"    onclick="navigate('home')">Home</a>
+    <a class="nav-item"        id="nav-projects" onclick="navigate('projects')">Projects</a>
+    <a class="nav-item"        id="nav-about"    onclick="navigate('about')">About Me</a>
+  </nav>
+  <div class="main-shell">
+    <aside class="sidebar">
+      <div class="sidebar-section">Navigation</div>
+      <div class="sidebar-item active" id="sb-home"     onclick="navigate('home')"><span class="sidebar-icon">🌿</span> Home</div>
+      <div class="sidebar-item"        id="sb-projects" onclick="navigate('projects')"><span class="sidebar-icon">⚙️</span> Projects</div>
+      <div class="sidebar-item"        id="sb-about"    onclick="navigate('about')"><span class="sidebar-icon">👤</span> About Me</div>
+      <div class="sidebar-section" style="margin-top:12px;">Quick Links</div>
+      <div class="sidebar-item"><span class="sidebar-icon">📄</span> Resume</div>
+      <div class="sidebar-item"><span class="sidebar-icon">💼</span> LinkedIn</div>
+      <div class="sidebar-item"><span class="sidebar-icon">🐙</span> GitHub</div>
+      <div style="margin-top:auto;padding:14px 8px;display:flex;gap:7px;align-items:flex-end;">
+        <div class="orb" style="width:22px;height:22px;"></div>
+        <div class="orb" style="width:15px;height:15px;opacity:0.72;"></div>
+        <div class="orb" style="width:10px;height:10px;opacity:0.52;"></div>
+        <div class="orb" style="width:7px;height:7px;opacity:0.36;"></div>
+      </div>
+    </aside>
+
+    <main class="content-area" id="content-area"></main>
+  </div>
+</div>
+
+<script>
+/* ─── DATA ─── */
+const PROJECTS = [
+  {
+    id:'rtos-scheduler', emoji:'⏱️', name:'RTOS Task Scheduler',
+    // ── CUSTOMISE: replace this path with your own image file ──
+    preview: '',   /* e.g. 'images/rtos-preview.jpg' */
+    short:'Preemptive real-time OS kernel with priority-based scheduling for ARM Cortex-M4.',
+    tags:['C','ARM Cortex-M4','FreeRTOS','CMSIS'], color:'#0c2000',
+    overview:'Built a preemptive multi-tasking kernel for the STM32F4 series — priority-based scheduling, semaphores, message queues, and low-power idle hook. Sub-10 μs context switch at 168 MHz.',
+    details:[
+      {title:'Architecture',body:'Tick-based preemptive scheduler via SysTick. Priority-sorted ready list; PendSV performs context switches by pushing/popping registers to per-task stacks.'},
+      {title:'Synchronization',body:'Binary and counting semaphores with priority-inheritance prevent inversion. Mutex-protected message queues enable safe inter-task communication.'},
+      {title:'Testing & Validation',body:'Validated with logic analyser and oscilloscope. 16-task stress tests confirmed no missed deadlines under full load.'},
+    ],
+    images:['Scheduler block diagram','Logic analyser capture','Context switch waveform']
+  },
+  {
+    id:'can-gateway', emoji:'🚗', name:'CAN Bus Gateway',
+    preview: '',   /* e.g. 'images/can-preview.jpg' */
+    short:'Dual-channel CAN 2.0B gateway bridging legacy ECUs to a modern Ethernet backbone.',
+    tags:['C','STM32','CAN 2.0B','Ethernet','MISRA-C'], color:'#102000',
+    overview:'CAN-to-Ethernet gateway for automotive diagnostics. Routes CAN frames via lightweight UDP sockets for real-time PC monitoring.',
+    details:[
+      {title:'Protocol Handling',body:'STM32 bxCAN driver with hardware acceptance masks and lock-free ring buffer for high-priority frames.'},
+      {title:'Ethernet Transport',body:'lwIP UDP datagram transport. Custom framing adds timestamps and sequence numbers for out-of-order detection.'},
+      {title:'MISRA-C Compliance',body:'Full MISRA-C:2012 coverage; PC-lint static analysis confirmed zero required-rule violations.'},
+    ],
+    images:['Hardware setup','Wireshark capture','CAN frame diagram']
+  },
+  {
+    id:'sensor-fusion', emoji:'📡', name:'IMU Sensor Fusion',
+    preview: '',   /* e.g. 'images/imu-preview.jpg' */
+    short:'9-DOF attitude estimation with complementary + Kalman filters on RP2040.',
+    tags:['C++','RP2040','I²C','SPI','DSP'], color:'#0a1c00',
+    overview:'ICM-42688-P + QMC5883L fusion for stable roll/pitch/yaw. Compared lightweight complementary filter vs full 9-DOF EKF.',
+    details:[
+      {title:'Sensor Drivers',body:'Bare-metal I²C/SPI via RP2040 PIO for deterministic timing. FIFO burst reads at 1 kHz sampling.'},
+      {title:'Filter Design',body:'Complementary filter blends gyro integration with accel tilt. EKF uses quaternion state to avoid gimbal lock, runs at 500 Hz.'},
+      {title:'Calibration',body:'Ellipsoid-fit calibration for hard/soft iron compensation; bias/scale factors for accel and gyro.'},
+    ],
+    images:['Attitude estimation plot','Calibration sphere','Filter comparison graph']
+  },
+  {
+    id:'bootloader', emoji:'🔄', name:'Custom Bootloader',
+    preview: '',   /* e.g. 'images/bootloader-preview.jpg' */
+    short:'Field-updatable dual-bank STM32 bootloader with AES-128 firmware verification.',
+    tags:['C','STM32','AES-128','UART','Flash'], color:'#081800',
+    overview:'Stage-1 bootloader in protected flash. Validates firmware via UART XMODEM-CRC then performs atomic bank-swap after AES-128-CBC verification.',
+    details:[
+      {title:'Secure Boot',body:'SHA-256 hash + AES-128-CBC signature verified against OTP key. Only verified images committed to inactive bank.'},
+      {title:'Dual-Bank',body:'Separate flash banks. BKP register flag controls swap; watchdog ensures rollback on repeated failure.'},
+      {title:'UART Transfer',body:'XMODEM-CRC 128-byte blocks at 115200 baud. Python host script handles segmentation, retransmission, and handshaking.'},
+    ],
+    images:['Boot flowchart','Flash memory map','Terminal session']
+  },
+  {
+    id:'motor-controller', emoji:'🔋', name:'Brushless Motor Controller',
+    preview: '',   /* e.g. 'images/foc-preview.jpg' */
+    short:'FOC for a 3-phase BLDC motor on STM32G4 with real-time telemetry.',
+    tags:['C','STM32G4','FOC','ADC','PWM','DMA'], color:'#0e1e00',
+    overview:'Complete FOC controller for a 500 W e-bike hub motor. Clarke/Park transforms, 20 kHz PI current loops, SVPWM, UART telemetry.',
+    details:[
+      {title:'FOC Pipeline',body:'Dual-ADC injected sampling synced to PWM. Independent PI loops: Id = 0, Iq = torque demand.'},
+      {title:'SVPWM',body:'Centre-aligned complementary PWM with programmable dead-time. 15% better bus utilisation vs sinusoidal PWM.'},
+      {title:'Telemetry',body:'115200-baud UART at 1 kHz. Python live-plot supports in-field PI tuning without reflashing.'},
+    ],
+    images:['FOC block diagram','Phase current waveform','Python dashboard']
+  },
+  {
+    id:'wireless-sensor', emoji:'📶', name:'BLE Wireless Sensor Node',
+    preview: '',   /* e.g. 'images/ble-preview.jpg' */
+    short:'Ultra-low-power BLE 5.0 node on nRF52840 — 6 μA avg, 2-year coin-cell life.',
+    tags:['C','nRF52840','BLE 5.0','Zephyr RTOS','I²C','Low Power'], color:'#061400',
+    overview:'Coin-cell node measuring temperature, humidity, CO₂. Advertises every 30 s; spends the rest in System OFF at 6 μA average.',
+    details:[
+      {title:'Power Architecture',body:'RTC-wakeup → I²C sample → 20-byte BLE advertisement → System OFF. Peak 7 mA TX for < 2 ms.'},
+      {title:'Zephyr Abstraction',body:'Device-tree bindings + sensor shims for SHT40 and SCD41. PM notifier callbacks gate peripheral rails via GPIO load switches.'},
+      {title:'Gateway & Dashboard',body:'RPi 4 Python BLE scanner → InfluxDB → Grafana dashboard with configurable alert thresholds.'},
+    ],
+    images:['PCB photo','Current oscilloscope','Grafana dashboard']
+  },
+];
+
+const SKILLS = [
+  'C / C++','Python','ARM Assembly','FreeRTOS','Zephyr RTOS',
+  'STM32 HAL / LL','UART / SPI / I²C','CAN Bus','lwIP',
+  'CMake / Make','Git','GDB / OpenOCD','Oscilloscope & Logic Analyser','MISRA-C',
+];
+
+const EXPERIENCES = [
+  {title:'Firmware Engineering Intern',meta:'ACME Robotics · Summer 2024',
+   desc:'Motor control firmware for a 6-DOF robotic arm on STM32H7. FOC in C reduced torque ripple 18%. Integrated CANopen for multi-axis coordination.'},
+  {title:'Embedded Software Co-op',meta:'TechCorp IoT · Fall 2023',
+   desc:'BLE 5.0 peripheral firmware on nRF52840. Cut wake-up current from 42 μA to 8 μA. Python test harness reduced regression time 60%.'},
+  {title:'Research Assistant — MEMS Lab',meta:'University of Waterloo · 2022–2023',
+   desc:'Signal-conditioning for capacitive MEMS pressure sensors. Python data-acquisition scripts. Contributed to one peer-reviewed conference paper.'},
+];
+
+const EDUCATION = [
+  {icon:'🎓',title:'B.A.Sc. Computer Engineering',
+   meta:'University of Waterloo · 2021 – 2026',
+   desc:'Specialisation in Embedded Systems. Key courses: Real-Time Systems, Digital Hardware, Control Theory, Advanced Microprocessors, Computer Networks.'},
+];
+
+const HOBBIES = [
+  {icon:'🎸',title:'Guitar',      text:'Fingerstyle and classical — Tárrega etudes and ambient drone pieces.',imgs:['Performance','Recording setup']},
+  {icon:'🌱',title:'Hydroponics', text:'NFT system: lettuce, basil, strawberries. PID-controlled nutrient dosing.',imgs:['Lettuce NFT','Herb tray']},
+  {icon:'🏔️',title:'Hiking',      text:'Ontario trail systems and backcountry canoe routes in Algonquin.',imgs:['Algonquin','Bruce Trail']},
+  {icon:'🔧',title:'Electronics', text:'Restoring vintage synthesisers and designing custom Eurorack modules.',imgs:['Synth rack','PCB closeup']},
+];
+
+/* ─── LOGIN ─── */
+function doLogin() {
+  const pw = document.getElementById('login-pw').value;
+  if (pw !== 'helloworld' && pw !== '') {
+    const inp = document.getElementById('login-pw');
+    inp.style.outline = '2px solid #ff6020';
+    setTimeout(() => inp.style.outline = '', 900);
+    return;
+  }
+  document.getElementById('page-login').classList.remove('active');
+  const main = document.getElementById('page-main');
+  main.classList.add('active');
+  spawnBgOrbs();
+  navigate('home');
+}
+
+/* ─── BACKGROUND ORBS ─── */
+function spawnBgOrbs() {
+  const layer = document.getElementById('bg-orbs');
+  [
+    {s:90, t:6,  l:86, o:0.22},
+    {s:58, t:55, l:3,  o:0.18},
+    {s:42, t:24, l:70, o:0.16},
+    {s:32, t:72, l:58, o:0.17},
+    {s:24, t:38, l:47, o:0.13},
+    {s:20, t:14, l:36, o:0.15},
+    {s:16, t:82, l:20, o:0.13},
+    {s:13, t:63, l:80, o:0.12},
+    {s:11, t:45, l:13, o:0.10},
+    {s: 9, t:92, l:46, o:0.11},
+    {s: 8, t:30, l:64, o:0.09},
+    {s: 6, t:78, l:32, o:0.08},
+  ].forEach(({s,t,l,o}) => {
+    const d = document.createElement('div');
+    d.className = 'bg-orb-bubble';
+    d.style.cssText = `width:${s}px;height:${s}px;top:${t}%;left:${l}%;opacity:${o};`;
+    layer.appendChild(d);
+  });
+}
+
+/* ─── ROUTING ─── */
+function navigate(view, projectId) {
+  ['home','projects','about'].forEach(v => {
+    const match = v === view || (v === 'projects' && view === 'project-detail');
+    document.getElementById('nav-'+v)?.classList.toggle('active', match);
+    document.getElementById('sb-'+v)?.classList.toggle('active', match);
+  });
+  const area = document.getElementById('content-area');
+  if      (view === 'home')           area.innerHTML = renderHome();
+  else if (view === 'projects')       area.innerHTML = renderProjects();
+  else if (view === 'project-detail') area.innerHTML = renderProjectDetail(projectId);
+  else if (view === 'about')          area.innerHTML = renderAbout();
+  area.scrollTop = 0;
+}
+
+/* ─── HOME ─── */
+function renderHome() {
+  return `
+  <div class="glass-panel home-panel">
+    <div class="pg-title">welcome to sydney's portfolio!</div>
+    <div class="pg-subtitle">
+      4th-year Computer Engineering student at the University of Waterloo.<br>
+      Embedded software &amp; firmware engineer.
+    </div>
+
+    <div class="pg-section">about me</div>
+    <div class="pg-body">
+      I write bare-metal C and C++ for resource-constrained ARM microcontrollers and love the challenge
+      of making software work reliably at the boundary between hardware and code — whether that's a
+      real-time scheduler hitting microsecond deadlines, a low-power wireless node sipping microamps,
+      or a motor controller spinning a brushless motor with field-oriented control.<br><br>
+      When I'm not debugging firmware with an oscilloscope, you'll find me fingerpicking guitar,
+      tending my hydroponic herb setup, or designing Eurorack modules.
+    </div>
+
+    <div class="pg-section">navigation</div>
+    <div class="pg-body">Explore my work or learn more about me below.</div>
+
+    <div class="home-btn-row">
+      <button class="btn-gloss" onclick="navigate('projects')">⚙️ View Projects</button>
+      <button class="btn-orange" onclick="navigate('about')">👤 About Me</button>
+    </div>
+  </div>`;
+}
+
+/* ─── PROJECTS LIST ─── */
+function renderProjects() {
+  return `
+  <div class="glass-panel projects-header-panel">
+    <div class="pg-title">projects and work</div>
+    <div class="pg-subtitle">Click any project to read full implementation notes and view image slots.</div>
+  </div>
+
+  <div class="projects-two-col">
+    ${PROJECTS.map(p => `
+    <div class="glass-panel proj-card" onclick="navigate('project-detail','${p.id}')">
+      <div class="proj-card-thumb">
+        ${p.preview
+          ? `<img src="${p.preview}" alt="${p.name} preview">`
+          : `<span style="padding:6px;line-height:1.4;">${p.emoji}<br><small style="font-size:9.5px;">add preview<br>image</small></span>`
+        }
+      </div>
+      <div class="proj-card-text">
+        <div class="proj-card-name">${p.name}</div>
+        <div class="proj-card-desc">${p.short}</div>
+        <div class="proj-card-tags">${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}</div>
+      </div>
+    </div>`).join('')}
+  </div>`;
+}
+
+/* ─── PROJECT DETAIL ─── */
+function renderProjectDetail(id) {
+  const p = PROJECTS.find(x=>x.id===id);
+  if(!p) return '<p style="color:#ccc">Not found.</p>';
+  return `
+  <button class="btn-chrome back-btn" onclick="navigate('projects')">← Back to Projects</button>
+
+  <div class="project-detail-hero" style="background:linear-gradient(135deg,${p.color},#010500);">
+    <span style="position:relative;z-index:2;">${p.emoji}</span>
+  </div>
+
+  <div class="glass-panel" style="padding:22px 26px;margin-bottom:16px;">
+    <div class="pg-title" style="margin-bottom:6px;">${p.name}</div>
+    <div class="proj-card-tags" style="margin-bottom:14px;">
+      ${p.tags.map(t=>`<span class="proj-tag">${t}</span>`).join('')}
+    </div>
+    <div class="detail-section">
+      <h3>Overview</h3>
+      <div class="pg-body" style="margin-bottom:0;">${p.overview}</div>
+    </div>
+  </div>
+
+  ${p.details.map(d=>`
+  <div class="glass-panel detail-section" style="padding:18px 22px;margin-bottom:12px;">
+    <h3>${d.title}</h3>
+    <div class="pg-body" style="margin-bottom:0;">${d.body}</div>
+  </div>`).join('')}
+
+  <div class="glass-panel" style="padding:18px 22px;margin-top:4px;">
+    <div class="detail-section">
+      <h3>📸 Images</h3>
+      <div class="pg-body" style="font-size:12px;margin-bottom:10px;opacity:0.55;">
+        Replace slots with &lt;img&gt; tags pointing to your own files.
+      </div>
+      <div class="detail-images">
+        ${p.images.map(img=>`<div class="detail-img-slot">[ ${img} ]</div>`).join('')}
+      </div>
+    </div>
+  </div>`;
+}
+
+/* ─── ABOUT ─── */
+function renderAbout() {
+  return `
+  <div class="about-grid">
+
+    <div class="glass-panel" style="padding:22px 28px 14px;">
+      <div class="pg-title" style="margin-bottom:4px;">work experience</div>
+      <div class="pg-subtitle" style="margin-bottom:18px;">What I've built in industry and research.</div>
+      ${EXPERIENCES.map(e=>`
+      <div class="timeline-item">
+        <div class="timeline-dot"></div>
+        <div>
+          <div class="pg-section" style="font-size:16px;margin-bottom:2px;">${e.title}</div>
+          <div class="pg-meta">${e.meta}</div>
+          <div class="pg-body" style="margin-bottom:0;">${e.desc}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <div class="glass-panel" style="padding:22px 28px 18px;">
+      <div class="pg-title" style="margin-bottom:4px;">education</div>
+      <div class="pg-subtitle" style="margin-bottom:18px;">Academic background.</div>
+      ${EDUCATION.map(e=>`
+      <div class="edu-card">
+        <div class="edu-icon">${e.icon}</div>
+        <div>
+          <div class="pg-section" style="font-size:16px;margin-bottom:2px;">${e.title}</div>
+          <div class="pg-meta">${e.meta}</div>
+          <div class="pg-body" style="margin-bottom:0;">${e.desc}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+
+    <div class="glass-panel" style="padding:22px 28px;">
+      <div class="pg-title" style="margin-bottom:4px;">technical skills</div>
+      <div class="pg-subtitle" style="margin-bottom:16px;">Languages, tools, and platforms I work with.</div>
+      <div class="skills-pills">
+        ${SKILLS.map(s=>`<span class="skill-pill">${s}</span>`).join('')}
+      </div>
+    </div>
+
+    <div class="glass-panel" style="padding:22px 28px;">
+      <div class="pg-title" style="margin-bottom:4px;">hobbies &amp; interests</div>
+      <div class="pg-subtitle" style="margin-bottom:18px;">What I do when I'm not at a desk.</div>
+      <div class="hobbies-grid">
+        ${HOBBIES.map(h=>`
+        <div>
+          <div class="hobby-icon">${h.icon}</div>
+          <div class="pg-section" style="font-size:15px;margin-bottom:5px;">${h.title}</div>
+          <div class="pg-body" style="margin-bottom:0;font-size:13px;">${h.text}</div>
+          <div class="hobby-img-strip">${h.imgs.map(i=>`<div class="hobby-img">[ ${i} ]</div>`).join('')}</div>
+        </div>`).join('')}
+      </div>
+    </div>
+
+  </div>`;
+}
+</script>
+</body>
+</html>
