@@ -30,7 +30,7 @@
   /* LOGIN – soft lime-glass sunlight feel */
   #page-login {
     align-items: center; justify-content: center;
-    background: url('frutigeraeroclover.jpg') center/cover no-repeat;
+    background: url('images/frutigeraeroclover.jpg') center/cover no-repeat;
   }
 
   /* Main pages — set --bg-image via JS or leave as CSS fallback */
@@ -63,10 +63,10 @@
   .glass-panel {
     /* warmer: a touch of amber/olive mixed into the green */
     background: linear-gradient(158deg,
-      rgba(20, 45, 5,  0.56) 0%,
-      rgba(35, 55, 8,  0.50) 35%,
-      rgba(25, 48, 5,  0.54) 70%,
-      rgba(10, 35, 2,  0.60) 100%);
+      rgba(15, 34, 4, 0.56) 0%,
+      rgba(6, 11, 1, 0.5) 35%,
+      rgba(24, 45, 5, 0.54) 70%,
+      rgba(6, 21, 1, 0.6) 100%);
     border: 1.5px solid rgba(255,255,255,0.32);
     border-radius: 16px;
     box-shadow:
@@ -398,11 +398,13 @@
     font-size: 10px; font-weight: 700; color: rgba(160,210,60,0.55);
     letter-spacing: 1.2px; text-transform: uppercase; padding: 10px 8px 4px;
   }
-  .sidebar-item {
+  .sidebar-item,
+  .sidebar-item:visited {
     display: flex; align-items: center; gap: 8px;
     padding: 8px 10px; border-radius: 8px;
     font-size: 12.5px; font-weight: 500; color: rgba(180,230,80,0.80);
     cursor: pointer; transition: all .1s; border: 1px solid transparent;
+    text-decoration: none;
   }
   .sidebar-item:hover {
     background: rgba(140,200,0,0.18); border-color: rgba(160,220,0,0.28); color: #c8f060;
@@ -412,8 +414,6 @@
     border-color: rgba(160,220,0,0.42); color: #d8f060;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.08);
   }
-  .sidebar-icon { font-size: 15px; flex-shrink: 0; }
-
   .content-area {
     flex: 1; padding: 28px 32px; overflow-y: auto;
     /* transparent so bg image shows through */
@@ -535,18 +535,6 @@
   /* ════════════════════════════════════════════
      PROJECT DETAIL
   ════════════════════════════════════════════ */
-  .project-detail-hero {
-    width: 100%; height: 170px;
-    border-radius: 16px; overflow: hidden; margin-bottom: 22px;
-    display: flex; align-items: center; justify-content: center; font-size: 68px;
-    position: relative;
-    border: 1.5px solid rgba(255,255,255,0.22);
-    box-shadow: 0 8px 30px rgba(0,0,0,0.50), inset 0 1px 0 rgba(255,255,255,0.22);
-  }
-  .project-detail-hero::before {
-    content: ''; position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.12) 0%, transparent 50%);
-  }
   .detail-section { margin-bottom: 14px; }
   .detail-section h3 {
     font-size: 11px; font-weight: 700; color: rgba(200,240,80,0.80);
@@ -556,12 +544,71 @@
     display: grid; grid-template-columns: repeat(auto-fill, minmax(168px, 1fr)); gap: 10px;
     margin-top: 10px;
   }
+  .project-embed {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1.5px solid rgba(160,220,0,0.24);
+    background: rgba(0,0,0,0.18);
+  }
+  .project-embed iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+    display: block;
+  }
+  .project-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .project-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 7px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(160,220,0,0.32);
+    background: rgba(150,210,0,0.14);
+    color: #dfffa2;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .project-link:hover {
+    background: rgba(160,220,0,0.22);
+    border-color: rgba(190,240,80,0.42);
+    color: #f2ffbd;
+  }
   .detail-img-slot {
     height: 112px; border-radius: 10px;
     background: rgba(255,255,255,0.06);
     border: 1.5px dashed rgba(150,210,0,0.30);
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; color: rgba(170,230,50,0.40); font-style: italic;
+    overflow: hidden;
+  }
+  .detail-img-slot a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+    color: #dfffa2;
+    text-decoration: none;
+    font-style: normal;
+    font-weight: 600;
+    text-align: center;
+    background: rgba(150,210,0,0.10);
+  }
+  .detail-img-slot video,
+  .detail-img-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
   .back-btn { display: inline-flex; align-items: center; gap: 7px; margin-bottom: 20px; }
 
@@ -599,22 +646,6 @@
     background: linear-gradient(135deg, var(--o-pale), var(--o-mid));
     box-shadow: 0 0 12px rgba(255,118,28,0.38), inset 0 1px 0 rgba(255,255,255,0.55);
     display: flex; align-items: center; justify-content: center; font-size: 19px;
-  }
-
-  .hobbies-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px;
-  }
-  .hobby-card { padding: 18px 20px; text-align: center; }
-  .hobby-icon  { font-size: 34px; margin-bottom: 10px; }
-  .hobby-img-strip {
-    display: flex; gap: 9px; margin-top: 12px; overflow-x: auto; padding-bottom: 3px;
-  }
-  .hobby-img {
-    min-width: 108px; height: 70px; border-radius: 8px;
-    background: rgba(255,255,255,0.07);
-    border: 1.5px dashed rgba(150,210,0,0.28);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 10.5px; color: rgba(170,230,50,0.40); font-style: italic; flex-shrink: 0;
   }
 
   @media(max-width:700px){
@@ -727,7 +758,8 @@
       Recommended: a square photo, at least 216×216 px.
       The ::before shine overlay stays on top automatically.
     -->
-    <div class="login-avatar">🐱</div>
+    <div class="login-avatar"><img src="images/sydney.jpeg"
+             style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
     <div class="login-username">sydney</div>
     <div class="login-input-wrap">
       <input type="password" id="login-pw" placeholder="Password"
@@ -747,7 +779,7 @@
      MAIN SHELL
 ══════════════════════════════════ -->
 <div id="page-main" class="has-bg-image"
-    style="--bg-image:url('frutigeraerobg_1.jpg')">
+    style="--bg-image:url('images/frutigeraerobg_1.jpg')">
   <nav class="navbar">
     <div class="nav-brand" onclick="navigate('home')">
       <!--
@@ -757,7 +789,7 @@
         Recommended: a circular 56×56 px PNG with transparency.
       -->
       <div class="orb nav-brand-orb"></div>
-      <span class="nav-brand-text">sydney.dev</span>
+      <span class="nav-brand-text">syd.sid</span>
     </div>
     <div class="nav-sep"></div>
     <a class="nav-item active" id="nav-home"    onclick="navigate('home')">Home</a>
@@ -766,14 +798,10 @@
   </nav>
   <div class="main-shell">
     <aside class="sidebar">
-      <div class="sidebar-section">Navigation</div>
-      <div class="sidebar-item active" id="sb-home"     onclick="navigate('home')"><span class="sidebar-icon">🌿</span> Home</div>
-      <div class="sidebar-item"        id="sb-projects" onclick="navigate('projects')"><span class="sidebar-icon">⚙️</span> Projects</div>
-      <div class="sidebar-item"        id="sb-about"    onclick="navigate('about')"><span class="sidebar-icon">👤</span> About Me</div>
-      <div class="sidebar-section" style="margin-top:12px;">Quick Links</div>
-      <div class="sidebar-item"><span class="sidebar-icon">📄</span> Resume</div>
-      <div class="sidebar-item"><span class="sidebar-icon">💼</span> LinkedIn</div>
-      <div class="sidebar-item"><span class="sidebar-icon">🐙</span> GitHub</div>
+      <div class="sidebar-section">Quick Links</div>
+      <a class="sidebar-item" href="images/Sydney_Yang_Resume.pdf">Resume</a>
+      <a class="sidebar-item" href="https://www.linkedin.com/in/sydneyg-yang/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+      <a class="sidebar-item" href="https://github.com/sydneyyangg" target="_blank" rel="noopener noreferrer">GitHub</a>
       <div style="margin-top:auto;padding:14px 8px;display:flex;gap:7px;align-items:flex-end;">
         <div class="orb" style="width:22px;height:22px;"></div>
         <div class="orb" style="width:15px;height:15px;opacity:0.72;"></div>
@@ -790,112 +818,147 @@
 /* ─── DATA ─── */
 const PROJECTS = [
   {
-    id:'rtos-scheduler', emoji:'⏱️', name:'RTOS Task Scheduler',
+    id:'omnichord', emoji:'⏱️', name:'Omnichord',
     // ── CUSTOMISE: replace this path with your own image file ──
-    preview: '',   /* e.g. 'images/rtos-preview.jpg' */
-    short:'Preemptive real-time OS kernel with priority-based scheduling for ARM Cortex-M4.',
-    tags:['C','ARM Cortex-M4','FreeRTOS','CMSIS'], color:'#0c2000',
-    overview:'Built a preemptive multi-tasking kernel for the STM32F4 series — priority-based scheduling, semaphores, message queues, and low-power idle hook. Sub-10 μs context switch at 168 MHz.',
-    details:[
-      {title:'Architecture',body:'Tick-based preemptive scheduler via SysTick. Priority-sorted ready list; PendSV performs context switches by pushing/popping registers to per-task stacks.'},
-      {title:'Synchronization',body:'Binary and counting semaphores with priority-inheritance prevent inversion. Mutex-protected message queues enable safe inter-task communication.'},
-      {title:'Testing & Validation',body:'Validated with logic analyser and oscilloscope. 16-task stress tests confirmed no missed deadlines under full load.'},
+    preview: 'images/omnichord.png',   /* e.g. 'images/rtos-preview.jpg' */
+    links:[
+      {label:'GitHub', href:'https://github.com/sydneyyangg/Omnichord-ESP32'}
     ],
-    images:['Scheduler block diagram','Logic analyser capture','Context switch waveform']
+    short:'An electronic harp, equipped custom waveform synthesis, a soft potentiometer, and chord selection.',
+    tags:['C','ESP32','FreeRTOS','I2S', 'SOLIDWORKS', 'KiCAD'], color:'#0c2000',
+    overview:'Built an omnichord with its own touch sensing interface, and audio synthesis with sin wave manipulation.',
+    details:[
+      {title:'architecture',body:'using FreeRTOS to maintain priority-sorted tasks, with audio synthesis at high priority due to its high frequenncy nature. i have discovered that one missing sample can be brutal, causing these popping sounds. analog can be brutal! i used RTOS mutex queues used to prevent race conditions when audio task accesses softpot data.'},
+      {title:'audio and its testing',body:'synthesized with purely sine waves initially, now with added harmonics to create a more layered, complex, and brighter sound. exponential fade is implemented to mimic real instruments. i initially had troubles with this as i neglected the 2^15 integer limit, causing clipping and horrible distortion. cool gain though?'},
+      {title:'hardware',body:'custom PCBA in the works, using KiCAD to layout components. current implementation is soldered onto a perfboard. laser-cut acrylic and 3D printed enclosure, CAD with SOLIDWORKS. i hope to make a real omnichord body soon, with frosted acrylic, LEDs signifying settings, and the like.'},
+    ],
+    images:[
+      {type:'video', src:'images/omnichord.mp4'},
+      {type:'image', label:'cad (coming soon)'}
+    ]
   },
   {
-    id:'can-gateway', emoji:'🚗', name:'CAN Bus Gateway',
-    preview: '',   /* e.g. 'images/can-preview.jpg' */
-    short:'Dual-channel CAN 2.0B gateway bridging legacy ECUs to a modern Ethernet backbone.',
-    tags:['C','STM32','CAN 2.0B','Ethernet','MISRA-C'], color:'#102000',
-    overview:'CAN-to-Ethernet gateway for automotive diagnostics. Routes CAN frames via lightweight UDP sockets for real-time PC monitoring.',
-    details:[
-      {title:'Protocol Handling',body:'STM32 bxCAN driver with hardware acceptance masks and lock-free ring buffer for high-priority frames.'},
-      {title:'Ethernet Transport',body:'lwIP UDP datagram transport. Custom framing adds timestamps and sequence numbers for out-of-order detection.'},
-      {title:'MISRA-C Compliance',body:'Full MISRA-C:2012 coverage; PC-lint static analysis confirmed zero required-rule violations.'},
+    id:'transit-tracker', emoji:'🚗', name:'Transit Tracker LED Matrix',
+    preview: 'images/transittracker.png',   /* e.g. 'images/can-preview.jpg' */
+    links:[
+      {label:'GitHub', href:'https://github.com/sydneyyangg/ESP32-HUB75-TransitTracker'}
     ],
-    images:['Hardware setup','Wireshark capture','CAN frame diagram']
+    short:'Wireless live bus/LRT ETA display, learning to optimize RAM and CPU time.',
+    tags:['C++','WiFi','FreeRTOS', 'Docker', 'HUB75 and parallel buses','ESP32'], color:'#102000',
+    overview:'for all the times i missed my bus, now i can passively view the upcoming arrivals to my local stop in my room. i reverse engineered the bus stop signs.',
+    details:[
+      {title:'RTOS',body:'after experiencing flicker issues on the display due to poor cpu time handling, used RTOS to support prioritization and concurrency by pinning different tasks to separate cores.'},
+      {title:'RAM troubles',body:'attempting to import the transit system information (found to be 200kB) crashed the firmware due to heap poisoning; the DRAM is 320kB, where that data + code + wifi stack + freertos reached the limit. decided to stream and decode the data live with early exit conditions to save memory and time.'},
+      {title:'automated build checks',body:'packaged source code, submodules, external libraries into a docker container, and used github actions to do automatic firmware build checks on every push.'},
+    ],
+    images:[
+      {type:'image', src: 'images/transittracker.png', label: 'Transit Tracker LED Matrix'},
+      {type:'image', src: 'images/transittrackerlog.png', label: 'Logs'}
+    ]
   },
   {
-    id:'sensor-fusion', emoji:'📡', name:'IMU Sensor Fusion',
-    preview: '',   /* e.g. 'images/imu-preview.jpg' */
-    short:'9-DOF attitude estimation with complementary + Kalman filters on RP2040.',
-    tags:['C++','RP2040','I²C','SPI','DSP'], color:'#0a1c00',
-    overview:'ICM-42688-P + QMC5883L fusion for stable roll/pitch/yaw. Compared lightweight complementary filter vs full 9-DOF EKF.',
-    details:[
-      {title:'Sensor Drivers',body:'Bare-metal I²C/SPI via RP2040 PIO for deterministic timing. FIFO burst reads at 1 kHz sampling.'},
-      {title:'Filter Design',body:'Complementary filter blends gyro integration with accel tilt. EKF uses quaternion state to avoid gimbal lock, runs at 500 Hz.'},
-      {title:'Calibration',body:'Ellipsoid-fit calibration for hard/soft iron compensation; bias/scale factors for accel and gyro.'},
+    id:'turret', emoji:'📡', name:'Target-Tracking Turret',
+    preview: 'images/turretcad.webp',   /* e.g. 'images/imu-preview.jpg' */
+    links:[
+      {label:'GitHub', href:'https://github.com/Adityya-K/box-bots'},
     ],
-    images:['Attitude estimation plot','Calibration sphere','Filter comparison graph']
+    short:'2 DOF person tracking turret. Motor control, computer vision, and launching mechanism all controlled with FreeRTOS.',
+    tags:['C','OpenCV','UART','Motor Control','WiFi'], color:'#0a1c00',
+    overview:'boxbots 2025. we made a cardboard automatic turret that uses openCV to track the face of a target, and launch cardboard (softly) and them.',
+    details:[
+      {title:'motor drivers',body:'we integrated continuous stepper motors, servo motors, and dc motors to control rotation of the unit, and the launch mechanisms. we used PWM to control these and map angle and speed commands to reality. freeRTOS was used to prioritize these, and an h-bridge was added to control speeds of all simultaneously. '},
+      {title:'aiming overshoot',body:'originally, commands like "left" and "right" were given until the target centered on the screen. however, overshoot would occur where the turret would oscillate left and right. we could have used PID, but hackathon time limits led us to alter our commands insead, reducing the angle of movement as it neared the target.'},
+      {title:'a fried h-bridge!',body:'5 minutes before our demo, we noticed the turret stopped shooting. we used logs to ensure software was not the error, and determined it was a hardware issue. multimeters were used across to board and a lack of continuity was found in the h-bridge, which was replaced.'},
+    ],
+    images:[
+      {type:'image', src:'images/turret.webp'},
+      {type:'video', src:'images/turret_demo.mp4'},
+      {type:'video', src:'images/turret_motor.mp4'}
+    ]
   },
   {
-    id:'bootloader', emoji:'🔄', name:'Custom Bootloader',
-    preview: '',   /* e.g. 'images/bootloader-preview.jpg' */
-    short:'Field-updatable dual-bank STM32 bootloader with AES-128 firmware verification.',
-    tags:['C','STM32','AES-128','UART','Flash'], color:'#081800',
-    overview:'Stage-1 bootloader in protected flash. Validates firmware via UART XMODEM-CRC then performs atomic bank-swap after AES-128-CBC verification.',
-    details:[
-      {title:'Secure Boot',body:'SHA-256 hash + AES-128-CBC signature verified against OTP key. Only verified images committed to inactive bank.'},
-      {title:'Dual-Bank',body:'Separate flash banks. BKP register flag controls swap; watchdog ensures rollback on repeated failure.'},
-      {title:'UART Transfer',body:'XMODEM-CRC 128-byte blocks at 115200 baud. Python host script handles segmentation, retransmission, and handshaking.'},
+    id:'renta-u', emoji:'🔄', name:'Renta-U App Design',
+    preview: 'images/renta-u.png',   /* e.g. 'images/bootloader-preview.jpg' */
+    embed:{
+      src:'https://embed.figma.com/design/EBF7egFH0wHFm49byMitjv/Hi-Fi-Wireframe?node-id=0-1&embed-host=share',
+      title:'Renta-U prototype'
+    },
+    links:[
+      {label:'Hi-Fi Wireframe', href:'https://www.figma.com/proto/EBF7egFH0wHFm49byMitjv/Hi-Fi-Wireframe?node-id=0-1&t=VWlKWyUFevIVCjWc-1'},
+      {label:'Case Study Report', href:'https://www.figma.com/deck/r3fakkiSQgUPQeXfoRYRZh/renta-u-case-study?node-id=1-357&t=KnR06xyL5KopM82I-1'}
     ],
-    images:['Boot flowchart','Flash memory map','Terminal session']
+    short:'Reworking an app UI with UX principles. The app, Renta-U, is like Airbnb for workplaces.',
+    tags:['Figma','Low/Hi-Fi Wireframe','A/B Testing','Usability Testing'], color:'#081800',
+    overview:'i noticed the ui in the app was difficult to follow and poorly implemented. i decided to consult potential users to gain a perspective on issues that can be fixed, and moved through that to redesign the app.',
+    details:[
+      {title:'usability surveys',body:'i did a usability survey to see what potential users would think about the designs. before acting upon the redesign.'},
+      {title:'analysis and solution',body:'users were more likely to view the website to appear untrustworthy, outdated, and not featureful. I implemented their suggestions. i added reviews, comments, and changed the color scheme to blue and white; colors that inspire trustworthy in the client. i worked around an existing mental model of a bookings app, gaining inspiration off of platforms like airbnb, hotel, and flight bookings.'},
+      {title:'results',body:'after, i conducted a new survey and also did usability testing on the users, watching them use the app and navigate it given a goal. with aggregated survey results, a 36% increase in navigation and trustworthiness was reported.'},
+    ],
+    images:[]
+    
   },
   {
-    id:'motor-controller', emoji:'🔋', name:'Brushless Motor Controller',
-    preview: '',   /* e.g. 'images/foc-preview.jpg' */
-    short:'FOC for a 3-phase BLDC motor on STM32G4 with real-time telemetry.',
-    tags:['C','STM32G4','FOC','ADC','PWM','DMA'], color:'#0e1e00',
-    overview:'Complete FOC controller for a 500 W e-bike hub motor. Clarke/Park transforms, 20 kHz PI current loops, SVPWM, UART telemetry.',
-    details:[
-      {title:'FOC Pipeline',body:'Dual-ADC injected sampling synced to PWM. Independent PI loops: Id = 0, Iq = torque demand.'},
-      {title:'SVPWM',body:'Centre-aligned complementary PWM with programmable dead-time. 15% better bus utilisation vs sinusoidal PWM.'},
-      {title:'Telemetry',body:'115200-baud UART at 1 kHz. Python live-plot supports in-field PI tuning without reflashing.'},
+    id:'bullshit-book', emoji:'🔋', name:'Bullsh*t Book of Brewing',
+    preview: 'images/bs_title.png',   /* e.g. 'images/foc-preview.jpg' */
+    links:[
+      {label:'Itch.io', href:'https://zeraoraking.itch.io/the-bullshit-book-of-brewing'}
     ],
-    images:['FOC block diagram','Phase current waveform','Python dashboard']
+    short:'UW Game jam F25: art designer for a digital logic game!',
+    tags:['krita','my art skills','burnout lol'], color:'#0e1e00',
+    overview:'given 2 days, i designed the UI of the game and implemented it artistically, hand drawn.',
+    details:[
+      {title:'game interface',body:'inspired by analog game consoles and computers. built this identity and ran with it for the whole game, creating consistent color selections and theming.'},
+      {title:'progress',body:'created 10+ frames in 2 days! navigated late nights with mcdonalds and lots of commitment.'},
+      {title:'just check it out here',body:'itch link'},
+    ],
+    images:[
+      {type:'image', src:'images/bs_home.png'},
+      {type:'video', src:'images/bs_playthrough.mp4'}
+    ]
   },
   {
-    id:'wireless-sensor', emoji:'📶', name:'BLE Wireless Sensor Node',
-    preview: '',   /* e.g. 'images/ble-preview.jpg' */
-    short:'Ultra-low-power BLE 5.0 node on nRF52840 — 6 μA avg, 2-year coin-cell life.',
-    tags:['C','nRF52840','BLE 5.0','Zephyr RTOS','I²C','Low Power'], color:'#061400',
-    overview:'Coin-cell node measuring temperature, humidity, CO₂. Advertises every 30 s; spends the rest in System OFF at 6 μA average.',
-    details:[
-      {title:'Power Architecture',body:'RTC-wakeup → I²C sample → 20-byte BLE advertisement → System OFF. Peak 7 mA TX for < 2 ms.'},
-      {title:'Zephyr Abstraction',body:'Device-tree bindings + sensor shims for SHT40 and SCD41. PM notifier callbacks gate peripheral rails via GPIO load switches.'},
-      {title:'Gateway & Dashboard',body:'RPi 4 Python BLE scanner → InfluxDB → Grafana dashboard with configurable alert thresholds.'},
+    id:'smartseed', emoji:'📶', name:'SmartSeed',
+    preview: 'images/smartseed.png',   /* e.g. 'images/ble-preview.jpg' */
+    embed:{
+      src:'https://embed.figma.com/proto/bt2y7gCLCsb5V1ViY2giT1/SmartSeed-Wireframe?node-id=410-264&embed-host=share',
+      title:'SmartSeed prototype'
+    },
+    links:[
+      {label:'GitHub', href:'https://github.com/matthewsingerrr/Smart-Seed'}
     ],
-    images:['PCB photo','Current oscilloscope','Grafana dashboard']
+    short:'doing UI for a ML powered plant health monitoring tool, equipped with soil detection and a dashboard.',
+    tags:['Figma','Adobe Photoshop', 'UI Design', 'Branding'], color:'#061400',
+    overview:'plants are hard to keep alive for a number of reasons, such as nutrient density and soil moisture levels. we can leverage ML to track plant health and lead report this to plant owners as soon as possible.',
+    details:[
+      {title:'branding',body:'motifs of plant health needed to be used in order to allow users to instantly know what the product relates to. we used shades of green throughout the website and logo.'},
+      {title:'planning',body:'i first consulted the team on what information may be displayed. we started minimal, with crucial statistics on nutrient density, such as nitrogen and SOC. as well as this, moisture. i was advised not to use graphics like charts or even non static images, so i kept the website visually simple to compensate.'},
+      {title:'execution',body:'i then proceeded to wireframe the whole process, and finally implementing the vision in figma.'},
+    ],
+    images:[]
   },
 ];
 
 const SKILLS = [
-  'C / C++','Python','ARM Assembly','FreeRTOS','Zephyr RTOS',
-  'STM32 HAL / LL','UART / SPI / I²C','CAN Bus','lwIP',
-  'CMake / Make','Git','GDB / OpenOCD','Oscilloscope & Logic Analyser','MISRA-C',
+  'C / C++','Python','FreeRTOS',
+  'STM32 HAL','UART / SPI / I²C / I²S','CAN Bus',
+  'CMake / Make','Git','Oscilloscope & Logic Analyser',
+  'SOLIDWORKS', 'AutoCAD', 'Autodesk Fusion,', 'KiCAD'
 ];
 
 const EXPERIENCES = [
-  {title:'Firmware Engineering Intern',meta:'ACME Robotics · Summer 2024',
-   desc:'Motor control firmware for a 6-DOF robotic arm on STM32H7. FOC in C reduced torque ripple 18%. Integrated CANopen for multi-axis coordination.'},
-  {title:'Embedded Software Co-op',meta:'TechCorp IoT · Fall 2023',
-   desc:'BLE 5.0 peripheral firmware on nRF52840. Cut wake-up current from 42 μA to 8 μA. Python test harness reduced regression time 60%.'},
-  {title:'Research Assistant — MEMS Lab',meta:'University of Waterloo · 2022–2023',
-   desc:'Signal-conditioning for capacitive MEMS pressure sensors. Python data-acquisition scripts. Contributed to one peer-reviewed conference paper.'},
+  {title:'Software Developer Intern ',meta:'Ford Motor Company · Fall 2025',
+   desc:'Developed low-level driver libraries in C# for automated hardware test stations, enabling electrical, RF, audio, and network validation for production TCUs'},
+  {title:'Firmware Engineer',meta:'Waterloo Space Research Team · Winter 2026 - Present',
+   desc:'Architecting embedded payload system for a CubeSat space debris imager (SOBER), using visible and IR cameras on STM32 communicating with an ARM processor TI RM46 controlled OBC over I2C'},
+  {title:'Data Analyst Intern',meta:'Treasury Board Secretariat · Winter 2025',
+   desc:'Automated CAPEX and OPEX calculations for school boards by building Python scripts that validated financial inputs and flagged funding envelope deviations, caught 8 discrepancies worth $40,000'},
 ];
 
 const EDUCATION = [
-  {icon:'🎓',title:'B.A.Sc. Computer Engineering',
-   meta:'University of Waterloo · 2021 – 2026',
-   desc:'Specialisation in Embedded Systems. Key courses: Real-Time Systems, Digital Hardware, Control Theory, Advanced Microprocessors, Computer Networks.'},
-];
-
-const HOBBIES = [
-  {icon:'🎸',title:'Guitar',      text:'Fingerstyle and classical — Tárrega etudes and ambient drone pieces.',imgs:['Performance','Recording setup']},
-  {icon:'🌱',title:'Hydroponics', text:'NFT system: lettuce, basil, strawberries. PID-controlled nutrient dosing.',imgs:['Lettuce NFT','Herb tray']},
-  {icon:'🏔️',title:'Hiking',      text:'Ontario trail systems and backcountry canoe routes in Algonquin.',imgs:['Algonquin','Bruce Trail']},
-  {icon:'🔧',title:'Electronics', text:'Restoring vintage synthesisers and designing custom Eurorack modules.',imgs:['Synth rack','PCB closeup']},
+  {icon:'🎓',title:'B.A.Sc. Systems Design Engineering',
+   meta:'University of Waterloo · 2024 – 2029',
+   desc:'Key courses: Data Structures and Algorithms, Digital Computation (C++), Digital Systems/HW, CAD Prototyping, Electromagnetism, Human Factors in Design, User Focused Design'},
 ];
 
 /* ─── LOGIN ─── */
@@ -938,6 +1001,54 @@ function spawnBgOrbs() {
   });
 }
 
+function linkify(text) {
+  return text.replace(/(https?:\/\/[^\s<]+)/g, url => `<a href="${url}" target="_blank" rel="noopener noreferrer">${url}</a>`);
+}
+
+function renderProjectMedia(item) {
+  if (item && typeof item === 'object') {
+    if (item.type === 'image' && item.src) {
+      return `<div class="detail-img-slot"><img src="${item.src}" alt="${item.label || 'Project image'}"></div>`;
+    }
+    if (item.type === 'video' && item.src) {
+      return `<div class="detail-img-slot"><video controls preload="metadata"><source src="${item.src}" type="video/mp4">Your browser cannot play this video. <a href="${item.src}" target="_blank" rel="noopener noreferrer">Open video</a>.</video></div>`;
+    }
+    if (item.type === 'link' && item.href) {
+      return `<div class="detail-img-slot"><a href="${item.href}" target="_blank" rel="noopener noreferrer">${item.label || 'Open link'}</a></div>`;
+    }
+    const href = item.href || item.src;
+    if (href) {
+      return `<div class="detail-img-slot"><a href="${href}" target="_blank" rel="noopener noreferrer">${item.label || 'Open media'}</a></div>`;
+    }
+    const fallbackLabel = item.label || (item.type === 'video' ? 'Video' : item.type === 'image' ? 'Image' : 'Media');
+    return `<div class="detail-img-slot">[ ${fallbackLabel} ]</div>`;
+  }
+  return `<div class="detail-img-slot">[ ${item} ]</div>`;
+}
+
+function renderProjectLinks(project) {
+  if (!project.links || project.links.length === 0) {
+    return '<div class="pg-body" style="margin-bottom:0;opacity:0.55;">No external link added yet.</div>';
+  }
+  return `
+    <div class="project-links">
+      ${project.links.map(link => `<a class="project-link" href="${link.href}" target="_blank" rel="noopener noreferrer">${link.label}</a>`).join('')}
+    </div>`;
+}
+
+function renderProjectEmbed(project) {
+  if (!project.embed || !project.embed.src) return '';
+  return `
+  <div class="glass-panel" style="padding:18px 22px;margin-top:4px;">
+    <div class="detail-section">
+      <h3>Prototype</h3>
+      <div class="project-embed">
+        <iframe src="${project.embed.src}" title="${project.embed.title || project.name}" allowfullscreen></iframe>
+      </div>
+    </div>
+  </div>`;
+}
+
 /* ─── ROUTING ─── */
 function navigate(view, projectId) {
   ['home','projects','about'].forEach(v => {
@@ -959,26 +1070,29 @@ function renderHome() {
   <div class="glass-panel home-panel">
     <div class="pg-title">welcome to sydney's portfolio!</div>
     <div class="pg-subtitle">
-      4th-year Computer Engineering student at the University of Waterloo.<br>
-      Embedded software &amp; firmware engineer.
+      2nd-year systems design engineering student at the university of waterloo;
     </div>
 
     <div class="pg-section">about me</div>
     <div class="pg-body">
-      I write bare-metal C and C++ for resource-constrained ARM microcontrollers and love the challenge
-      of making software work reliably at the boundary between hardware and code — whether that's a
-      real-time scheduler hitting microsecond deadlines, a low-power wireless node sipping microamps,
-      or a motor controller spinning a brushless motor with field-oriented control.<br><br>
-      When I'm not debugging firmware with an oscilloscope, you'll find me fingerpicking guitar,
-      tending my hydroponic herb setup, or designing Eurorack modules.
+      i like to think i'm a curious person, motivated by opportunities to traverse 
+      new terrains of knowledge :> <br><br>
+      i enjoy recognizing the ingenuity in the things 
+      surrounding us everyday. i hope to contribute to that as well; technologies that
+      weave themselves into our lives and go unnoticed. i believe what makes a solution
+      great is how it applies itself to a real! problem with simplicity, 
+      not necessarily its technical complexity. unfortunate, because i really enjoy
+      things that are technically complex!!<br><br>
+      up to now, i've explored various fields: embedded software, hardware, UX/UI design, 
+      graphic design, 3D modelling (CAD), audio, and more++;
     </div>
 
     <div class="pg-section">navigation</div>
-    <div class="pg-body">Explore my work or learn more about me below.</div>
+    <div class="pg-body">explore all the ways i spend my time.</div>
 
     <div class="home-btn-row">
-      <button class="btn-gloss" onclick="navigate('projects')">⚙️ View Projects</button>
-      <button class="btn-orange" onclick="navigate('about')">👤 About Me</button>
+      <button class="btn-gloss" onclick="navigate('projects')">Projects</button>
+      <button class="btn-orange" onclick="navigate('about')">About Me</button>
     </div>
   </div>`;
 }
@@ -1016,10 +1130,6 @@ function renderProjectDetail(id) {
   return `
   <button class="btn-chrome back-btn" onclick="navigate('projects')">← Back to Projects</button>
 
-  <div class="project-detail-hero" style="background:linear-gradient(135deg,${p.color},#010500);">
-    <span style="position:relative;z-index:2;">${p.emoji}</span>
-  </div>
-
   <div class="glass-panel" style="padding:22px 26px;margin-bottom:16px;">
     <div class="pg-title" style="margin-bottom:6px;">${p.name}</div>
     <div class="proj-card-tags" style="margin-bottom:14px;">
@@ -1027,27 +1137,33 @@ function renderProjectDetail(id) {
     </div>
     <div class="detail-section">
       <h3>Overview</h3>
-      <div class="pg-body" style="margin-bottom:0;">${p.overview}</div>
+      <div class="pg-body" style="margin-bottom:0;">${linkify(p.overview)}</div>
+    </div>
+    <div class="detail-section" style="margin-top:14px;">
+      <h3>Links</h3>
+      ${renderProjectLinks(p)}
     </div>
   </div>
 
   ${p.details.map(d=>`
   <div class="glass-panel detail-section" style="padding:18px 22px;margin-bottom:12px;">
     <h3>${d.title}</h3>
-    <div class="pg-body" style="margin-bottom:0;">${d.body}</div>
+    <div class="pg-body" style="margin-bottom:0;">${linkify(d.body)}</div>
   </div>`).join('')}
 
+  ${renderProjectEmbed(p)}
+
+  ${p.images.length > 0 ? `
   <div class="glass-panel" style="padding:18px 22px;margin-top:4px;">
     <div class="detail-section">
-      <h3>📸 Images</h3>
+      <h3>Media</h3>
       <div class="pg-body" style="font-size:12px;margin-bottom:10px;opacity:0.55;">
-        Replace slots with &lt;img&gt; tags pointing to your own files.
       </div>
       <div class="detail-images">
-        ${p.images.map(img=>`<div class="detail-img-slot">[ ${img} ]</div>`).join('')}
+        ${p.images.map(renderProjectMedia).join('')}
       </div>
     </div>
-  </div>`;
+  </div>` : ''}`;
 }
 
 /* ─── ABOUT ─── */
@@ -1088,20 +1204,6 @@ function renderAbout() {
       <div class="pg-subtitle" style="margin-bottom:16px;">Languages, tools, and platforms I work with.</div>
       <div class="skills-pills">
         ${SKILLS.map(s=>`<span class="skill-pill">${s}</span>`).join('')}
-      </div>
-    </div>
-
-    <div class="glass-panel" style="padding:22px 28px;">
-      <div class="pg-title" style="margin-bottom:4px;">hobbies &amp; interests</div>
-      <div class="pg-subtitle" style="margin-bottom:18px;">What I do when I'm not at a desk.</div>
-      <div class="hobbies-grid">
-        ${HOBBIES.map(h=>`
-        <div>
-          <div class="hobby-icon">${h.icon}</div>
-          <div class="pg-section" style="font-size:15px;margin-bottom:5px;">${h.title}</div>
-          <div class="pg-body" style="margin-bottom:0;font-size:13px;">${h.text}</div>
-          <div class="hobby-img-strip">${h.imgs.map(i=>`<div class="hobby-img">[ ${i} ]</div>`).join('')}</div>
-        </div>`).join('')}
       </div>
     </div>
 
