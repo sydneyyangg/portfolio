@@ -620,71 +620,6 @@
 </head>
 <body>
 
-<!--
-╔══════════════════════════════════════════════════════════════════╗
-║              SYDNEY.DEV PORTFOLIO — CUSTOMISATION GUIDE         ║
-╠══════════════════════════════════════════════════════════════════╣
-║                                                                  ║
-║  1. BACKGROUND (main pages)                                      ║
-║     ─────────────────────────────────────────────────────────── ║
-║     a) Put your image file (e.g. bg.jpg) in the same folder      ║
-║        as this HTML file.                                        ║
-║     b) Find the <div id="page-main" …> tag below.               ║
-║     c) Add these two attributes to it:                           ║
-║          class="has-bg-image"                                    ║
-║          style="--bg-image:url('bg.jpg')"                        ║
-║     Result: <div id="page-main" class="page has-bg-image"        ║
-║               style="--bg-image:url('bg.jpg')">                  ║
-║     The glass panels blur whatever is behind them automatically.  ║
-║                                                                  ║
-║  2. LOGIN BACKGROUND                                             ║
-║     ─────────────────────────────────────────────────────────── ║
-║     Find #page-login in the <style> block and replace the        ║
-║     'background:' property with:                                 ║
-║       background: url('login-bg.jpg') center/cover no-repeat;   ║
-║                                                                  ║
-║  3. LOGIN PROFILE PICTURE                                        ║
-║     ─────────────────────────────────────────────────────────── ║
-║     Find the comment "CUSTOMISE: Login profile picture" below.   ║
-║     Replace the 🐱 emoji inside .login-avatar with:             ║
-║       <img src="your-photo.jpg"                                  ║
-║            style="width:100%;height:100%;                        ║
-║                   object-fit:cover;border-radius:12px;">         ║
-║                                                                  ║
-║  4. NAV BAR ICON (next to "sydney.dev")                          ║
-║     ─────────────────────────────────────────────────────────── ║
-║     Find the comment "CUSTOMISE: Nav icon" below.                ║
-║     Replace <div class="orb nav-brand-orb"> with:               ║
-║       <img src="icon.png"                                        ║
-║            style="width:28px;height:28px;                        ║
-║                   border-radius:50%;object-fit:cover;">          ║
-║     Recommended: square PNG ≥56 px, with or without transparency ║
-║                                                                  ║
-║  5. PROJECT PREVIEW IMAGES                                       ║
-║     ─────────────────────────────────────────────────────────── ║
-║     In the PROJECTS array in the <script> block, each project    ║
-║     has a line:  preview: '',                                    ║
-║     Fill in the path to your image, e.g.:                        ║
-║       preview: 'images/rtos-preview.jpg',                        ║
-║     The card will then show your image instead of the emoji.     ║
-║     Recommended size: 176×176 px or larger, any aspect ratio     ║
-║     (it crops to fit the 88×88 square automatically).            ║
-║                                                                  ║
-║  6. PROJECT DETAIL / INLINE IMAGES                               ║
-║     ─────────────────────────────────────────────────────────── ║
-║     Each project also has an 'images' array that shows           ║
-║     placeholder slots on the detail page.                        ║
-║     In renderProjectDetail(), replace:                           ║
-║       <div class="detail-img-slot">[ ${img} ]</div>              ║
-║     with:                                                        ║
-║       <img src="images/rtos-diagram.jpg"                         ║
-║            style="width:100%;height:112px;                       ║
-║                   object-fit:cover;border-radius:10px;">         ║
-║     Or just change the 'images' array entries to img tags.       ║
-║                                                                  ║
-╚══════════════════════════════════════════════════════════════════╝
--->
-
 <!-- ══════════════════════════════════
      LOGIN PAGE
 ══════════════════════════════════ -->
@@ -701,14 +636,6 @@
   </div>
 
   <div class="login-wrap">
-    <!--
-      ═══ CUSTOMISE: Login profile picture ═══
-      Replace the emoji inside .login-avatar with:
-        <img src="images/your-photo.jpg"
-             style="width:100%;height:100%;object-fit:cover;border-radius:12px;">
-      Recommended: a square photo, at least 216×216 px.
-      The ::before shine overlay stays on top automatically.
-    -->
     <div class="login-avatar"><img src="images/sydney.jpeg"
              style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
     <div class="login-username">Sydney</div>
@@ -733,12 +660,6 @@
     style="--bg-image:url('images/frutigeraerobg_1.jpg')">
   <nav class="navbar">
     <div class="nav-brand" onclick="navigate('home')">
-      <!--
-        ═══ CUSTOMISE: Nav icon ═══
-        Replace the <div class="orb"> below with:
-          <img src="images/sydney.jpeg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
-        Recommended: a circular 56×56 px PNG with transparency.
-      -->
       <img class="nav-brand-avatar" src="images/sydney.jpeg" alt="Sydney profile photo">
       <span class="nav-brand-text">syd.sid</span>
     </div>
@@ -765,8 +686,7 @@
 const PROJECTS = [
   {
     id:'omnichord', emoji:'⏱️', name:'Omnichord',
-    // ── CUSTOMISE: replace this path with your own image file ──
-    preview: 'images/finalomni.jpeg',   /* e.g. 'images/rtos-preview.jpg' */
+    preview: 'images/finalomni.jpeg',
     links:[
       {label:'GitHub', href:'https://github.com/sydneyyangg/Omnichord-ESP32'}
     ],
@@ -785,7 +705,7 @@ const PROJECTS = [
   },
   {
     id:'transit-tracker', emoji:'🚗', name:'Transit Tracker LED Matrix',
-    preview: 'images/transittracker.png',   /* e.g. 'images/can-preview.jpg' */
+    preview: 'images/transittracker.png',
     links:[
       {label:'GitHub', href:'https://github.com/sydneyyangg/ESP32-HUB75-TransitTracker'}
     ],
@@ -804,7 +724,7 @@ const PROJECTS = [
   },
   {
     id:'turret', emoji:'📡', name:'Target-Tracking Turret',
-    preview: 'images/turretcad.webp',   /* e.g. 'images/imu-preview.jpg' */
+    preview: 'images/turretcad.webp',
     links:[
       {label:'GitHub', href:'https://github.com/Adityya-K/box-bots'},
     ],
@@ -824,7 +744,7 @@ const PROJECTS = [
   },
   {
     id:'renta-u', emoji:'🔄', name:'Renta-U App Design',
-    preview: 'images/renta-u.png',   /* e.g. 'images/bootloader-preview.jpg' */
+    preview: 'images/renta-u.png',
     embed:{
       src:'https://embed.figma.com/design/EBF7egFH0wHFm49byMitjv/Hi-Fi-Wireframe?node-id=0-1&embed-host=share',
       title:'Renta-U prototype'
@@ -846,7 +766,7 @@ const PROJECTS = [
   },
   {
     id:'bullshit-book', emoji:'🔋', name:'Bullsh*t Book of Brewing',
-    preview: 'images/bs_title.png',   /* e.g. 'images/foc-preview.jpg' */
+    preview: 'images/bs_title.png',
     links:[
       {label:'Itch.io', href:'https://zeraoraking.itch.io/the-bullshit-book-of-brewing'}
     ],
@@ -865,7 +785,7 @@ const PROJECTS = [
   },
   {
     id:'smartseed', emoji:'📶', name:'SmartSeed',
-    preview: 'images/smartseed.png',   /* e.g. 'images/ble-preview.jpg' */
+    preview: 'images/smartseed.png',
     embed:{
       src:'https://embed.figma.com/proto/bt2y7gCLCsb5V1ViY2giT1/SmartSeed-Wireframe?node-id=410-264&embed-host=share',
       title:'SmartSeed prototype'
