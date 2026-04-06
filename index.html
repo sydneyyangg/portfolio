@@ -5,13 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Sydney — Embedded Systems Engineer</title>
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600;700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Michroma&display=swap');
 
   :root {
     --o-mid:    #e85c00;
     --o-bright: #ff8c28;
     --o-pale:   #ffd090;
     --font: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    --font-aero: 'Michroma', 'Trebuchet MS', Tahoma, sans-serif;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,7 +31,7 @@
   /* LOGIN – soft lime-glass sunlight feel */
   #page-login {
     align-items: center; justify-content: center;
-    background: url('images/frutigeraeroclover.jpg') center/cover no-repeat;
+    background: url('images/frutigeraerologin.jpg') center/cover no-repeat;
   }
 
   /* Main pages — set --bg-image via JS or leave as CSS fallback */
@@ -63,9 +64,9 @@
   .glass-panel {
     /* warmer: a touch of amber/olive mixed into the green */
     background: linear-gradient(158deg,
-      rgba(15, 34, 4, 0.56) 0%,
+      rgba(7, 16, 2, 0.56) 0%,
       rgba(6, 11, 1, 0.5) 35%,
-      rgba(24, 45, 5, 0.54) 70%,
+      rgba(4, 8, 1, 0.54) 70%,
       rgba(6, 21, 1, 0.6) 100%);
     border: 1.5px solid rgba(255,255,255,0.32);
     border-radius: 16px;
@@ -85,7 +86,7 @@
    */
   .glass-panel::before {
     content: '';
-    position: absolute; top: 0; left: 0; right: 0; height: 52%;
+    position: absolute; top: 0; left: 0; right: 0; height: 42%;
     background: linear-gradient(180deg,
       rgba(255,255,255,0.52) 0%,
       rgba(255,255,255,0.20) 32%,
@@ -95,49 +96,6 @@
     pointer-events: none; z-index: 1;
   }
   .glass-panel > * { position: relative; z-index: 2; }
-
-  /* ════════════════════════════════════════════
-     ORB — glassy water-bubble style, clear not plastic
-  ════════════════════════════════════════════ */
-  .orb {
-    border-radius: 50%; flex-shrink: 0; position: relative;
-    /* clear glass: very light fill, strong rim darkening */
-    background: radial-gradient(circle at 36% 30%,
-      rgba(255,255,255,0.92) 0%,
-      rgba(210,255,180,0.50) 18%,
-      rgba(140,220,80,0.20)  42%,
-      rgba(60,150,20,0.14)   66%,
-      rgba(10,60,0,0.22)     88%,
-      rgba(0,30,0,0.38)      100%);
-    box-shadow:
-      /* inner rim shadow — gives glass depth */
-      inset 0 0 0 1.5px rgba(255,255,255,0.18),
-      inset -6px -8px 20px rgba(0,60,0,0.28),
-      inset 4px  5px  14px rgba(255,255,255,0.22),
-      /* outer glow */
-      0 4px 18px rgba(80,160,0,0.22),
-      0 1px  4px rgba(0,0,0,0.15);
-  }
-  /* primary highlight — large crescent top-left */
-  .orb::before {
-    content: ''; position: absolute;
-    top: 7%; left: 12%; width: 44%; height: 28%;
-    background: radial-gradient(ellipse,
-      rgba(255,255,255,0.90) 0%,
-      rgba(255,255,255,0.40) 50%,
-      transparent 100%);
-    border-radius: 50%; transform: rotate(-30deg);
-    z-index: 2;
-  }
-  /* secondary small highlight — bottom-right rim catch */
-  .orb::after {
-    content: ''; position: absolute;
-    bottom: 14%; right: 12%; width: 22%; height: 14%;
-    background: radial-gradient(ellipse,
-      rgba(255,255,255,0.55) 0%, transparent 100%);
-    border-radius: 50%; transform: rotate(20deg);
-    z-index: 2;
-  }
 
   /* ════════════════════════════════════════════
      BUTTONS
@@ -156,8 +114,9 @@
       inset 0 -1px  0 rgba(0,50,0,0.30),
       0 5px 14px rgba(40,90,0,0.40),
       0 0   0 1px rgba(0,70,0,0.18);
-    color: #142200; font-family: var(--font);
+    color: #142200; font-family: var(--font-aero);
     font-size: 13px; font-weight: 700;
+    letter-spacing: 0.02em;
     cursor: pointer; text-decoration: none;
     text-shadow: 0 1px 0 rgba(255,255,255,0.55);
     transition: filter .12s, transform .08s;
@@ -199,31 +158,6 @@
     border-radius: 4px; border: 1px solid rgba(255,255,255,0.25);
   }
 
-  /* ════════════════════════════════════════════
-     BACKGROUND BOKEH — spawned by JS post-login
-  ════════════════════════════════════════════ */
-  .bg-orbs-layer {
-    position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden;
-  }
-  .bg-orb-bubble {
-    position: absolute; border-radius: 50%;
-    background: radial-gradient(circle at 36% 30%,
-      rgba(255,255,255,0.88) 0%,
-      rgba(220,255,170,0.42) 20%,
-      rgba(130,210,40,0.16)  50%,
-      rgba(40,110,0,0.10)    80%,
-      rgba(0,30,0,0.16)      100%);
-    box-shadow:
-      inset 0 0 0 1px rgba(255,255,255,0.14),
-      inset -3px -4px 12px rgba(0,50,0,0.20),
-      inset  2px  3px  8px rgba(255,255,255,0.18);
-  }
-  .bg-orb-bubble::before {
-    content: ''; position: absolute;
-    top: 8%; left: 13%; width: 42%; height: 26%;
-    background: radial-gradient(ellipse, rgba(255,255,255,0.82) 0%, transparent 100%);
-    border-radius: 50%; transform: rotate(-28deg);
-  }
 
   /* ════════════════════════════════════════════
      LOGIN DECORATIVE MOTIFS
@@ -296,7 +230,7 @@
     background: linear-gradient(180deg, rgba(255,255,255,0.52) 0%, transparent 100%); z-index: 1;
   }
   .login-username {
-  font-size: 17px; font-weight: 300; color: #182800;
+  font-size: 25px; font-weight: 310; color: #182800;
   text-shadow: 0 1px 4px rgba(0,0,0,0.40); letter-spacing: 0.4px;
   }
   .login-input-wrap {
@@ -313,10 +247,10 @@
   .login-input-wrap input {
     flex: 1; padding: 10px 16px;
     background: transparent; border: none; outline: none;
-    font-family: var(--font); font-size: 13px;
+    font-family: var(--font); font-size: 13px; font-weight: 400;
     color: #2a4400;
   }
-  .login-input-wrap input::placeholder { color: #8ab840; }
+  .login-input-wrap input::placeholder { color: #8ab840; font-weight: 400; }
   .login-go {
     width: 42px; height: 42px;
     display: flex; align-items: center; justify-content: center;
@@ -360,9 +294,17 @@
     display: flex; align-items: center; gap: 10px;
     margin-right: 18px; cursor: pointer;
   }
-  .nav-brand-orb { width: 28px; height: 28px; }
+  .nav-brand-avatar {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
   .nav-brand-text {
+    font-family: var(--font-aero);
     font-size: 15px; font-weight: 700; color: #c8f040;
+    letter-spacing: 0.03em;
     text-shadow: 0 0 10px rgba(180,230,0,0.40);
   }
   .nav-sep { width: 1px; height: 24px; background: rgba(160,220,0,0.22); margin: 0 6px; }
@@ -425,20 +367,24 @@
      (home style = h1/h2/body style used everywhere)
   ════════════════════════════════════════════ */
   .pg-title {       /* large heading like "welcome to..." */
+    font-family: var(--font);
     font-size: 30px; font-weight: 300; color: #f0ffe8;
     letter-spacing: -0.5px; margin-bottom: 8px;
     text-shadow: 0 2px 12px rgba(0,0,0,0.40);
   }
   .pg-subtitle {    /* one-liner descriptor */
+    font-family: var(--font);
     font-size: 14px; color: rgba(220,255,160,0.80);
     margin-bottom: 26px; line-height: 1.58;
   }
   .pg-section {     /* section heading like "about me" */
+    font-family: var(--font);
     font-size: 22px; font-weight: 300; color: #f0ffe8;
     margin-bottom: 8px;
     text-shadow: 0 1px 8px rgba(0,0,0,0.30);
   }
   .pg-body {        /* body paragraphs */
+    font-family: var(--font);
     font-size: 13.5px; color: rgba(215,255,155,0.90);
     line-height: 1.70; margin-bottom: 20px;
   }
@@ -563,23 +509,40 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+  .project-links-panel {
+    padding: 18px 22px;
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
   .project-link {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    padding: 7px 12px;
+    padding: 10px 24px;
     border-radius: 999px;
-    border: 1px solid rgba(160,220,0,0.32);
-    background: rgba(150,210,0,0.14);
-    color: #dfffa2;
-    font-size: 12px;
+    border: 1.5px solid rgba(255,170,84,0.62);
+    background: rgba(255,122,20,0.24);
+    color: #ffd8ae;
+    font-size: 15px;
     font-weight: 600;
+    font-family: var(--font);
     text-decoration: none;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
   }
   .project-link:hover {
-    background: rgba(160,220,0,0.22);
-    border-color: rgba(190,240,80,0.42);
-    color: #f2ffbd;
+    background: rgba(255,132,30,0.34);
+    border-color: rgba(255,190,120,0.76);
+    color: #fff0d8;
+  }
+  .project-detail-block {
+    margin-bottom: 14px;
+    padding-bottom: 14px;
+    border-bottom: 1px solid rgba(160,220,0,0.24);
+  }
+  .project-detail-block:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
   }
   .detail-img-slot {
     height: 112px; border-radius: 10px;
@@ -722,8 +685,6 @@
 ╚══════════════════════════════════════════════════════════════════╝
 -->
 
-<div class="bg-orbs-layer" id="bg-orbs"></div>
-
 <!-- ══════════════════════════════════
      LOGIN PAGE
 ══════════════════════════════════ -->
@@ -739,16 +700,6 @@
     <div class="clover-stem"></div>
   </div>
 
-  <!-- Glassy water-bubble orbs scattered around -->
-  <div style="position:fixed;top:8%;right:12%;pointer-events:none;"><div class="orb" style="width:80px;height:80px;"></div></div>
-  <div style="position:fixed;top:25%;right:5%;pointer-events:none;"><div class="orb" style="width:44px;height:44px;opacity:0.82;"></div></div>
-  <div style="position:fixed;top:60%;right:18%;pointer-events:none;"><div class="orb" style="width:28px;height:28px;opacity:0.70;"></div></div>
-  <div style="position:fixed;bottom:18%;left:7%;pointer-events:none;"><div class="orb" style="width:60px;height:60px;opacity:0.72;"></div></div>
-  <div style="position:fixed;top:16%;left:10%;pointer-events:none;"><div class="orb" style="width:30px;height:30px;opacity:0.60;"></div></div>
-  <div style="position:fixed;top:42%;left:18%;pointer-events:none;"><div class="orb" style="width:18px;height:18px;opacity:0.50;"></div></div>
-  <div style="position:fixed;bottom:35%;right:32%;pointer-events:none;"><div class="orb" style="width:14px;height:14px;opacity:0.42;"></div></div>
-  <div style="position:fixed;top:72%;left:38%;pointer-events:none;"><div class="orb" style="width:10px;height:10px;opacity:0.36;"></div></div>
-
   <div class="login-wrap">
     <!--
       ═══ CUSTOMISE: Login profile picture ═══
@@ -760,7 +711,7 @@
     -->
     <div class="login-avatar"><img src="images/sydney.jpeg"
              style="width:100%;height:100%;object-fit:cover;border-radius:12px;"></div>
-    <div class="login-username">sydney</div>
+    <div class="login-username">Sydney</div>
     <div class="login-input-wrap">
       <input type="password" id="login-pw" placeholder="Password"
              onkeydown="if(event.key==='Enter')doLogin()">
@@ -785,10 +736,10 @@
       <!--
         ═══ CUSTOMISE: Nav icon ═══
         Replace the <div class="orb"> below with:
-          <img src="images/your-icon.png" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
+          <img src="images/sydney.jpeg" style="width:28px;height:28px;border-radius:50%;object-fit:cover;">
         Recommended: a circular 56×56 px PNG with transparency.
       -->
-      <div class="orb nav-brand-orb"></div>
+      <img class="nav-brand-avatar" src="images/sydney.jpeg" alt="Sydney profile photo">
       <span class="nav-brand-text">syd.sid</span>
     </div>
     <div class="nav-sep"></div>
@@ -802,12 +753,7 @@
       <a class="sidebar-item" href="images/Sydney_Yang_Resume.pdf">Resume</a>
       <a class="sidebar-item" href="https://www.linkedin.com/in/sydneyg-yang/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
       <a class="sidebar-item" href="https://github.com/sydneyyangg" target="_blank" rel="noopener noreferrer">GitHub</a>
-      <div style="margin-top:auto;padding:14px 8px;display:flex;gap:7px;align-items:flex-end;">
-        <div class="orb" style="width:22px;height:22px;"></div>
-        <div class="orb" style="width:15px;height:15px;opacity:0.72;"></div>
-        <div class="orb" style="width:10px;height:10px;opacity:0.52;"></div>
-        <div class="orb" style="width:7px;height:7px;opacity:0.36;"></div>
-      </div>
+      <div style="margin-top:auto;"></div>
     </aside>
 
     <main class="content-area" id="content-area"></main>
@@ -820,7 +766,7 @@ const PROJECTS = [
   {
     id:'omnichord', emoji:'⏱️', name:'Omnichord',
     // ── CUSTOMISE: replace this path with your own image file ──
-    preview: 'images/omnichord.png',   /* e.g. 'images/rtos-preview.jpg' */
+    preview: 'images/finalomni.jpeg',   /* e.g. 'images/rtos-preview.jpg' */
     links:[
       {label:'GitHub', href:'https://github.com/sydneyyangg/Omnichord-ESP32'}
     ],
@@ -834,7 +780,7 @@ const PROJECTS = [
     ],
     images:[
       {type:'video', src:'images/omnichord.mp4'},
-      {type:'image', label:'cad (coming soon)'}
+      {type:'image', src:'images/finalomni.jpeg'}
     ]
   },
   {
@@ -914,7 +860,7 @@ const PROJECTS = [
     ],
     images:[
       {type:'image', src:'images/bs_home.png'},
-      {type:'video', src:'images/bs_playthrough.mp4'}
+      {type:'image', src:'images/bs_title.png'}
     ]
   },
   {
@@ -935,7 +881,10 @@ const PROJECTS = [
       {title:'planning',body:'i first consulted the team on what information may be displayed. we started minimal, with crucial statistics on nutrient density, such as nitrogen and SOC. as well as this, moisture. i was advised not to use graphics like charts or even non static images, so i kept the website visually simple to compensate.'},
       {title:'execution',body:'i then proceeded to wireframe the whole process, and finally implementing the vision in figma.'},
     ],
-    images:[]
+    images:[
+      {type:'image', src:'images/smartseed_ui.png'},
+      {type:'image', src:'images/smartseed_ui2.png'}
+    ]
   },
 ];
 
@@ -973,32 +922,7 @@ function doLogin() {
   document.getElementById('page-login').classList.remove('active');
   const main = document.getElementById('page-main');
   main.classList.add('active');
-  spawnBgOrbs();
   navigate('home');
-}
-
-/* ─── BACKGROUND ORBS ─── */
-function spawnBgOrbs() {
-  const layer = document.getElementById('bg-orbs');
-  [
-    {s:90, t:6,  l:86, o:0.22},
-    {s:58, t:55, l:3,  o:0.18},
-    {s:42, t:24, l:70, o:0.16},
-    {s:32, t:72, l:58, o:0.17},
-    {s:24, t:38, l:47, o:0.13},
-    {s:20, t:14, l:36, o:0.15},
-    {s:16, t:82, l:20, o:0.13},
-    {s:13, t:63, l:80, o:0.12},
-    {s:11, t:45, l:13, o:0.10},
-    {s: 9, t:92, l:46, o:0.11},
-    {s: 8, t:30, l:64, o:0.09},
-    {s: 6, t:78, l:32, o:0.08},
-  ].forEach(({s,t,l,o}) => {
-    const d = document.createElement('div');
-    d.className = 'bg-orb-bubble';
-    d.style.cssText = `width:${s}px;height:${s}px;top:${t}%;left:${l}%;opacity:${o};`;
-    layer.appendChild(d);
-  });
 }
 
 function linkify(text) {
@@ -1034,6 +958,16 @@ function renderProjectLinks(project) {
     <div class="project-links">
       ${project.links.map(link => `<a class="project-link" href="${link.href}" target="_blank" rel="noopener noreferrer">${link.label}</a>`).join('')}
     </div>`;
+}
+
+function renderProjectLinksPanel(project) {
+  return `
+  <div class="glass-panel project-links-panel">
+    <div class="detail-section" style="margin-bottom:0;">
+      <h3>Links</h3>
+      ${renderProjectLinks(project)}
+    </div>
+  </div>`;
 }
 
 function renderProjectEmbed(project) {
@@ -1092,7 +1026,7 @@ function renderHome() {
 
     <div class="home-btn-row">
       <button class="btn-gloss" onclick="navigate('projects')">Projects</button>
-      <button class="btn-orange" onclick="navigate('about')">About Me</button>
+      <button class="btn-gloss btn-orange" onclick="navigate('about')">About Me</button>
     </div>
   </div>`;
 }
@@ -1128,7 +1062,7 @@ function renderProjectDetail(id) {
   const p = PROJECTS.find(x=>x.id===id);
   if(!p) return '<p style="color:#ccc">Not found.</p>';
   return `
-  <button class="btn-chrome back-btn" onclick="navigate('projects')">← Back to Projects</button>
+  <button class="btn-gloss btn-orange back-btn" onclick="navigate('projects')">Back to Projects</button>
 
   <div class="glass-panel" style="padding:22px 26px;margin-bottom:16px;">
     <div class="pg-title" style="margin-bottom:6px;">${p.name}</div>
@@ -1139,17 +1073,18 @@ function renderProjectDetail(id) {
       <h3>Overview</h3>
       <div class="pg-body" style="margin-bottom:0;">${linkify(p.overview)}</div>
     </div>
-    <div class="detail-section" style="margin-top:14px;">
-      <h3>Links</h3>
-      ${renderProjectLinks(p)}
-    </div>
   </div>
 
-  ${p.details.map(d=>`
-  <div class="glass-panel detail-section" style="padding:18px 22px;margin-bottom:12px;">
-    <h3>${d.title}</h3>
-    <div class="pg-body" style="margin-bottom:0;">${linkify(d.body)}</div>
-  </div>`).join('')}
+  ${p.details.length > 0 ? `
+  <div class="glass-panel" style="padding:18px 22px;margin-bottom:12px;">
+    ${p.details.map(d=>`
+    <div class="project-detail-block detail-section">
+      <h3>${d.title}</h3>
+      <div class="pg-body" style="margin-bottom:0;">${linkify(d.body)}</div>
+    </div>`).join('')}
+  </div>` : ''}
+
+  ${renderProjectLinksPanel(p)}
 
   ${renderProjectEmbed(p)}
 
